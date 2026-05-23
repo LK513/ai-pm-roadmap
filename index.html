@@ -7,10 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- Floating side widget -->
+  <aside class="side-widget" aria-label="快速记录">
+    <div class="side-widget__label">速记</div>
+    <button class="sw-btn sw-btn--reflect" data-type="reflection" title="反思">💭</button>
+    <button class="sw-btn sw-btn--idea" data-type="idea" title="灵感">💡</button>
+    <button class="sw-btn sw-btn--resource" data-type="resource" title="资源">📚</button>
+    <button class="sw-btn sw-btn--blocker" data-type="blocker" title="卡壳">🚧</button>
+  </aside>
+
   <div id="app">
 
     <!-- Hero -->
     <header class="hero">
+      <div class="hero__bg"></div>
       <h1 class="hero__title" id="north-star-quote">…</h1>
       <p class="hero__milestone" id="north-star-milestone">…</p>
     </header>
@@ -19,59 +30,42 @@
     <section class="timeline" id="timeline"></section>
     <div class="countdown" id="countdown-area"></div>
 
-    <!-- Quick Actions -->
-    <nav class="actions" aria-label="快速记录">
-      <button class="action action--reflect" data-type="reflection">
-        <span class="action__icon">💭</span><span class="action__label">反思</span>
-      </button>
-      <button class="action action--idea" data-type="idea">
-        <span class="action__icon">💡</span><span class="action__label">灵感</span>
-      </button>
-      <button class="action action--resource" data-type="resource">
-        <span class="action__icon">📚</span><span class="action__label">资源</span>
-      </button>
-      <button class="action action--blocker" data-type="blocker">
-        <span class="action__icon">🚧</span><span class="action__label">卡壳</span>
-      </button>
-    </nav>
-
-    <!-- Modal -->
-    <div class="modal-overlay" id="modal-overlay">
-      <div class="modal">
-        <div class="modal__header">
-          <h2 class="modal__title" id="modal-title">…</h2>
-          <button class="modal__close" id="modal-close">×</button>
-        </div>
-        <div class="modal__body" id="modal-body"></div>
-        <div class="modal__actions">
-          <button class="btn" id="modal-cancel">取消</button>
-          <button class="btn btn--primary" id="modal-submit">复制到剪贴板</button>
-        </div>
-      </div>
-    </div>
-
     <!-- Main -->
     <main class="content">
 
+      <!-- Tasks -->
       <section class="card card--tasks">
         <div class="card__head">
           <h2 class="card__title">本周任务</h2>
           <div class="card__head-right">
             <span class="card__tag card__tag--green" id="week-of"></span>
-            <button class="card__fetch-btn" id="btn-fetch-tasks" title="让 Claude 布置本周任务">⟳ 获取任务</button>
+            <button class="card__fetch-btn" id="btn-fetch-tasks">⟳ 获取任务</button>
           </div>
         </div>
         <ul class="task-list" id="tasks-list"></ul>
         <div class="task-add" id="task-add-area"></div>
+
+        <div class="completed-section hidden" id="completed-section">
+          <div class="completed-header">
+            <span class="completed-header__label">已完成</span>
+            <span class="completed-header__count" id="completed-count"></span>
+          </div>
+          <div class="completed-list" id="completed-list"></div>
+        </div>
+
+        <div class="eval-bar">
+          <button class="card__fetch-btn" id="btn-eval">📊 月度评价</button>
+        </div>
       </section>
 
+      <!-- Two columns -->
       <div class="grid-2">
         <section class="card card--frontier">
           <div class="card__head">
             <h2 class="card__title">AI 前沿</h2>
             <div class="card__head-right">
               <span class="card__tag" id="frontier-badge"></span>
-              <button class="card__fetch-btn" id="btn-fetch-frontier" title="让 Claude 更新前沿动态">⟳ 获取前沿</button>
+              <button class="card__fetch-btn" id="btn-fetch-frontier">⟳ 获取前沿</button>
             </div>
           </div>
           <div class="frontier-list" id="frontier-list"></div>
@@ -94,6 +88,21 @@
         <a id="issues-link" href="" target="_blank" rel="noopener">反馈</a>
       </footer>
     </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal">
+        <div class="modal__header">
+          <h2 class="modal__title" id="modal-title">…</h2>
+          <button class="modal__close" id="modal-close">×</button>
+        </div>
+        <div class="modal__body" id="modal-body"></div>
+        <div class="modal__actions">
+          <button class="btn" id="modal-cancel">取消</button>
+          <button class="btn btn--primary" id="modal-submit">确认</button>
+        </div>
+      </div>
+    </div>
 
     <div id="error-banner" class="error-banner hidden">
       <h2>数据加载失败</h2>
