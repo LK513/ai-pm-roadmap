@@ -359,7 +359,8 @@ function openFrontierModal(item) {
 
 /* ── Eval ── */
 function initEval() {
-  document.getElementById('btn-eval')?.onclick = () => {
+  const btnEval = document.getElementById('btn-eval');
+  if (btnEval) btnEval.onclick = () => {
     const arch = JSON.parse(localStorage.getItem('ai-pm-archive') || '[]');
     const cur = _parse().filter(t => t.done);
     const all = [...arch, ...cur];
@@ -376,13 +377,15 @@ function initFetch(data) {
   const theme = data.progress.currentTheme;
   const pct = data.progress.phases.find(p => p.quarter === q)?.progress || 0;
 
-  document.getElementById('btn-fetch-tasks')?.onclick = () => {
+  const btnTasks = document.getElementById('btn-fetch-tasks');
+  if (btnTasks) btnTasks.onclick = () => {
     const today = new Date().toISOString().split('T')[0];
     navigator.clipboard?.writeText(`我是AI-PM转型中的产品经理，当前处于 ${q} ${theme}（${pct}%）。\n\n请布置本周（${today} 起）4-5个具体可执行任务，围绕当前阶段目标。\n\n写入 D:\\AI-PM\\data.json 的 thisWeek.tasks（{id, task, done}）和 thisWeek.weekOf（${today}），然后 git commit + push。`)
       .then(() => toast('已复制'), () => toast('复制失败'));
   };
 
-  document.getElementById('btn-fetch-frontier')?.onclick = () => {
+  const btnFrontier = document.getElementById('btn-fetch-frontier');
+  if (btnFrontier) btnFrontier.onclick = () => {
     navigator.clipboard?.writeText('请用 WebSearch 获取今日 AI 行业前沿动态（10 条，聚焦消金/金融/PM 视角），每条含 title/source/date/relevance/url/content（摘要200-300字）。写入 D:\\AI-PM\\data.json 的 frontier.items，更新 lastFrontierUpdate，然后 git commit + push。')
       .then(() => toast('已复制'), () => toast('复制失败'));
   };
