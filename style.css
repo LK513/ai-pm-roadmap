@@ -824,7 +824,308 @@ ul { list-style: none; }
   .task-add { padding-left: var(--sp-4); padding-right: var(--sp-4); }
 }
 
+/* ========================================
+   DYNAMIC ANIMATION SYSTEM
+   ======================================== */
+
+/* ── 1. Ambient floating orbs ── */
+body::before {
+  animation: orb-drift-1 18s ease-in-out infinite;
+}
+body::after {
+  animation: orb-drift-2 22s ease-in-out infinite;
+}
+@keyframes orb-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-60px, 80px) scale(1.1); }
+  50% { transform: translate(40px, 120px) scale(0.95); }
+  75% { transform: translate(-30px, 40px) scale(1.05); }
+}
+@keyframes orb-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(80px, -60px) scale(1.08); }
+  66% { transform: translate(-40px, -100px) scale(0.92); }
+}
+
+/* ── 2. Scanning line ── */
+#app::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+  opacity: 0.5;
+  z-index: 100;
+  animation: scan-line 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes scan-line {
+  0% { transform: translateY(0); opacity: 0; }
+  5% { opacity: 0.5; }
+  95% { opacity: 0.5; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ── 3. Page entrance ── */
+#app {
+  animation: page-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── 4. Hero title reveal ── */
+.hero__title {
+  animation: title-reveal 800ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
+}
+.hero__sub {
+  animation: title-reveal 800ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+}
+@keyframes title-reveal {
+  from { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* ── 5. Stats bar entrance ── */
+.stats-bar {
+  animation: stats-in 600ms cubic-bezier(0.22, 1, 0.36, 1) 350ms both;
+}
+@keyframes stats-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── 6. Timeline dot entrance ── */
+.tl-node {
+  animation: dot-pop 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.tl-node:nth-child(1) { animation-delay: 500ms; }
+.tl-node:nth-child(3) { animation-delay: 600ms; }
+.tl-node:nth-child(5) { animation-delay: 700ms; }
+.tl-node:nth-child(7) { animation-delay: 800ms; }
+@keyframes dot-pop {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ── 7. Panel entrance (staggered) ── */
+.panel--tasks { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 400ms both; }
+.panel--done { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 500ms both; }
+.panel--frontier { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 600ms both; }
+.panel--reflection { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 700ms both; }
+@keyframes panel-rise {
+  from { opacity: 0; transform: translateY(30px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── 8. Side widget slide-in ── */
+.side-widget {
+  animation: widget-in 500ms cubic-bezier(0.22, 1, 0.36, 1) 800ms both;
+}
+@keyframes widget-in {
+  from { opacity: 0; transform: translateY(-50%) translateX(40px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* ── 9. Card hover: lift + glow border ── */
+.panel {
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 250ms;
+}
+.panel:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card), 0 0 20px rgba(0, 180, 255, 0.06);
+  border-color: rgba(0, 180, 255, 0.15);
+}
+
+/* ── 10. Frontier item hover ── */
+.frontier-item {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              background 200ms,
+              border-color 200ms;
+}
+.frontier-item:hover {
+  transform: translateX(4px);
+  background: var(--bg-hover);
+  border-color: rgba(0, 180, 255, 0.12);
+}
+.frontier-item:hover .frontier-item__arrow {
+  transform: translateX(4px);
+  color: var(--neon-cyan);
+}
+.frontier-item__arrow {
+  transition: transform 200ms, color 200ms;
+}
+
+/* ── 11. Task hover ── */
+.task {
+  transition: background 150ms, transform 150ms;
+}
+.task:hover {
+  background: var(--bg-hover);
+  transform: translateX(2px);
+}
+
+/* ── 12. Reflection hover ── */
+.reflection {
+  transition: background 150ms, transform 150ms, border-color 150ms;
+  border-left: 2px solid transparent;
+}
+.reflection:hover {
+  background: var(--bg-hover);
+  border-left-color: var(--neon-purple);
+}
+
+/* ── 13. Button press feedback ── */
+.btn, .btn-sm {
+  transition: transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 150ms,
+              background 150ms;
+}
+.btn:active, .btn-sm:active {
+  transform: scale(0.96);
+}
+.btn--primary:active {
+  box-shadow: 0 0 16px rgba(0, 180, 255, 0.4);
+}
+.btn-sm:active {
+  transform: scale(0.95);
+}
+
+/* ── 14. Side widget button hover ── */
+.sw-btn {
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 200ms,
+              box-shadow 200ms;
+}
+.sw-btn:hover {
+  transform: scale(1.1);
+  background: rgba(0, 180, 255, 0.15);
+  box-shadow: 0 0 12px rgba(0, 180, 255, 0.2);
+}
+.sw-btn:active {
+  transform: scale(0.92);
+}
+
+/* ── 15. Done item expand animation ── */
+.done-item__detail {
+  transition: max-height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 200ms,
+              padding 300ms;
+}
+.done-item__detail.hidden {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.done-item__detail:not(.hidden) {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* ── 16. Modal entrance ── */
+.modal-overlay .modal {
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 280ms;
+}
+.modal-overlay:not(.open) .modal {
+  transform: translateY(20px) scale(0.97);
+  opacity: 0;
+}
+
+/* ── 17. Badge pulse for stale data ── */
+.panel__badge--stale {
+  animation: badge-warn 2s ease-in-out infinite;
+}
+@keyframes badge-warn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── 18. Countdown number emphasis ── */
+.stats-bar__countdown em {
+  animation: count-glow 3s ease-in-out infinite;
+}
+@keyframes count-glow {
+  0%, 100% { text-shadow: 0 0 12px rgba(0, 180, 255, 0.4); }
+  50% { text-shadow: 0 0 20px rgba(0, 180, 255, 0.7), 0 0 40px rgba(0, 180, 255, 0.2); }
+}
+
+/* ── 19. Task check animation ── */
+.task__check {
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), color 150ms;
+}
+.task__check:hover {
+  transform: scale(1.15);
+}
+.task__check svg {
+  transition: opacity 150ms, transform 200ms;
+}
+.task:hover .task__check svg {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+/* ── 20. Toast entrance ── */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.95); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* ── 21. Scroll-reveal placeholder ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── 22. Stagger children reveal ── */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 350ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 50ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 100ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 150ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 200ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(6) { transition-delay: 250ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(7) { transition-delay: 300ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(8) { transition-delay: 350ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(9) { transition-delay: 400ms; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(10) { transition-delay: 450ms; opacity: 1; transform: none; }
+
+/* ── 23. Ambient grid scan ── */
+body::before {
+  background-image:
+    linear-gradient(rgba(0,180,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: grid-breathe 8s ease-in-out infinite;
+}
+@keyframes grid-breathe {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  .panel { opacity: 1; transform: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .panel, .hero__title, .hero__sub, .stats-bar, .side-widget,
+  .panel--tasks, .panel--done, .panel--frontier, .panel--reflection,
+  .reveal { opacity: 1; transform: none; }
 }
