@@ -326,6 +326,30 @@ function renderFooter(data) {
   document.getElementById('issues-link').href = ISSUES_URL;
 }
 
+/* ── Fetch Buttons ── */
+function initFetchButtons(data) {
+  const q = data.progress.currentQuarter;
+  const theme = data.progress.currentTheme;
+  const pct = data.progress.phases.find(p => p.quarter === q)?.progress || 0;
+
+  document.getElementById('btn-fetch-tasks')?.addEventListener('click', () => {
+    const today = new Date().toISOString().split('T')[0];
+    const prompt = `我是AI-PM转型中的产品经理，当前处于 ${q} ${theme} 阶段（完成${pct}%）。\n\n请帮我布置本周（${today} 起）的 4-5 个具体可执行任务。\n要求：\n1. 任务要具体到可以直接打钩\n2. 围绕当前阶段目标\n3. 难度适中，一周能完成\n\n写入 D:\\AI-PM\\data.json 的 thisWeek.tasks（格式：{id, task, done}）和 thisWeek.weekOf（设为 ${today}），然后 git commit + push。`;
+    navigator.clipboard?.writeText(prompt).then(
+      () => toast('已复制，粘贴给 Claude'),
+      () => toast('复制失败')
+    );
+  });
+
+  document.getElementById('btn-fetch-frontier')?.addEventListener('click', () => {
+    const prompt = `请用 WebSearch 获取今日 AI 行业前沿动态（10 条，聚焦消金/金融/PM 视角），每条包含：\n- title: 标题\n- source: 来源\n- date: 日期（YYYY-MM-DD）\n- relevance: 对消金PM的一句话价值\n- url: 原文链接\n\n写入 D:\\AI-PM\\data.json 的 frontier.items，更新 lastFrontierUpdate 为今日，然后 git commit + push。`;
+    navigator.clipboard?.writeText(prompt).then(
+      () => toast('已复制，粘贴给 Claude'),
+      () => toast('复制失败')
+    );
+  });
+}
+
 /* ── Utils ── */
 function toast(msg) {
   const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
@@ -344,6 +368,7 @@ function esc(s) {
     renderHero(data);
     renderTimeline(data.progress);
     initModal();
+    initFetchButtons(data);
     renderTasks(data.thisWeek.tasks, data.thisWeek.weekOf);
     renderFrontier(data.frontier);
     renderReflections(data.reflections);
