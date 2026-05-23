@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "lastUpdate": "2026-05-23",
+    "userName": "李凯",
+    "githubUser": "LK513",
+    "yearStart": "2026-01-01",
+    "yearEnd": "2026-12-31",
+    "checkpoint90Days": "2026-08-23"
+  },
+  "northStar": {
+    "title": "1 年从消金后台 PM 转型 AI PM",
+    "milestone": "Q4 推 1 个 AI 功能上线",
+    "quote": "Slow is smooth, smooth is fast"
+  },
+  "progress": {
+    "currentQuarter": "Q2",
+    "currentTheme": "场景识别期",
+    "phases": [
+      {
+        "quarter": "Q1",
+        "theme": "概念入门",
+        "status": "完成",
+        "progress": 100,
+        "deliverables": ["读完《Building AI Products》", "AI 行业图谱整理", "5 个 AI 工具实操"]
+      },
+      {
+        "quarter": "Q2",
+        "theme": "场景识别",
+        "status": "进行中",
+        "progress": 35,
+        "deliverables": ["消金 3 大 AI 切入点分析", "数据可用性盘点", "竞品 AI 功能拆解"]
+      },
+      {
+        "quarter": "Q3",
+        "theme": "写 AI PRD",
+        "status": "未开始",
+        "progress": 0,
+        "deliverables": ["1 份完整 AI PRD", "数据/合规/质量三章模板", "技术评审过会"]
+      },
+      {
+        "quarter": "Q4",
+        "theme": "推 AI 功能上线",
+        "status": "未开始",
+        "progress": 0,
+        "deliverables": ["AI 功能 v1 上线", "数据效果回归", "项目复盘文档"]
+      }
+    ]
+  },
+  "thisWeek": {
+    "weekOf": "2026-05-18",
+    "tasks": [
+      {"id": 1, "task": "完成《Building AI Products》第 3 章", "done": true},
+      {"id": 2, "task": "梳理消金场景中 3 个 AI 可能切入点", "done": false},
+      {"id": 3, "task": "和数据团队对一次,问数据可用性", "done": false},
+      {"id": 4, "task": "拆解 1 个同行 AI 智能客服 PRD", "done": false}
+    ]
+  },
+  "frontier": {
+    "lastFrontierUpdate": "2026-05-22",
+    "items": [
+      {
+        "title": "OpenAI Realtime API 支持中文方言",
+        "source": "OpenAI Blog",
+        "date": "2026-05-22",
+        "relevance": "可用于催收外呼场景,降低方言识别失败率"
+      },
+      {
+        "title": "Anthropic 推出 Claude for Finance",
+        "source": "Anthropic",
+        "date": "2026-05-21",
+        "relevance": "金融垂类大模型参考,合规打法可借鉴"
+      },
+      {
+        "title": "信也科技 AI 智能客服上线",
+        "source": "财经",
+        "date": "2026-05-20",
+        "relevance": "消金同行 AI 实践,值得拆 PRD"
+      }
+    ]
+  },
+  "reflections": [
+    {
+      "date": "2026-05-20",
+      "tag": "PRD",
+      "content": "AI PRD 和传统 PRD 最大不同:必须写'数据来源/质量/合规'三章。传统 PRD 写'用户输入手机号'就够了,AI PRD 要写'手机号脱敏后做训练样本,数据合规走法务,样本量 ≥ 5w'。"
+    },
+    {
+      "date": "2026-05-15",
+      "tag": "认知",
+      "content": "AI PM 不是搞算法,是搞'判断力'。判断什么场景值得用 AI、什么场景用规则更划算。"
+    }
+  ],
+  "stats": {
+    "issuesProcessed": 0,
+    "reflectionsCount": 2
+  }
+}
