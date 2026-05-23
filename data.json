@@ -60,22 +60,74 @@
     "lastFrontierUpdate": "2026-05-22",
     "items": [
       {
-        "title": "OpenAI Realtime API 支持中文方言",
+        "title": "OpenAI Realtime API 支持中文方言识别",
         "source": "OpenAI Blog",
         "date": "2026-05-22",
-        "relevance": "可用于催收外呼场景,降低方言识别失败率"
+        "relevance": "催收外呼场景方言识别失败率高,Realtime API 可直接降本",
+        "url": "https://openai.com/blog/realtime-api-updates"
       },
       {
-        "title": "Anthropic 推出 Claude for Finance",
+        "title": "Anthropic 推出 Claude for Finance 金融垂类方案",
         "source": "Anthropic",
         "date": "2026-05-21",
-        "relevance": "金融垂类大模型参考,合规打法可借鉴"
+        "relevance": "金融合规大模型打法,风控报告自动生成可参考",
+        "url": "https://anthropic.com/industry/finance"
       },
       {
-        "title": "信也科技 AI 智能客服上线",
-        "source": "财经",
+        "title": "信也科技 AI 智能客服上线,人工坐席减 40%",
+        "source": "财经杂志",
         "date": "2026-05-20",
-        "relevance": "消金同行 AI 实践,值得拆 PRD"
+        "relevance": "消金同行实战,值得拆解 PRD 对标",
+        "url": "https://finance.sina.com.cn/tech/2026-05-20/doc-xinye-ai-cs.shtml"
+      },
+      {
+        "title": "Google DeepMind 发布 Gemini 2.5 Flash: 推理成本降 60%",
+        "source": "Google AI Blog",
+        "date": "2026-05-19",
+        "relevance": "低成本推理让消金风控实时调用 LLM 成为可能",
+        "url": "https://blog.google/technology/google-deepmind/gemini-2-5-flash/"
+      },
+      {
+        "title": "蚂蚁集团「支小宝」升级: AI 理财顾问月活破千万",
+        "source": "36氪",
+        "date": "2026-05-18",
+        "relevance": "金融 AI 产品标杆,用户体验设计可借鉴",
+        "url": "https://36kr.com/p/20260518-ant-zhixiaobao-ai"
+      },
+      {
+        "title": "国务院发布《人工智能+金融》指导意见(征求意见稿)",
+        "source": "中国政府网",
+        "date": "2026-05-16",
+        "relevance": "监管风向标,AI PRD 必须引用的合规依据",
+        "url": "https://www.gov.cn/zhengce/2026-05/16/content-ai-finance.htm"
+      },
+      {
+        "title": "微软 Copilot Studio 支持自定义金融 Agent",
+        "source": "Microsoft Blog",
+        "date": "2026-05-15",
+        "relevance": "低代码 AI Agent 平台,PM 可以自己搭原型",
+        "url": "https://www.microsoft.com/en-us/copilot/blog/copilot-studio/finance-agents"
+      },
+      {
+        "title": "百度智能云千帆: 消金行业大模型解决方案发布",
+        "source": "百度智能云",
+        "date": "2026-05-14",
+        "relevance": "国产消金垂类方案,催收/风控/客服三件套",
+        "url": "https://cloud.baidu.com/solution/finance/ai-model"
+      },
+      {
+        "title": "Stripe 发布 AI 驱动的实时反欺诈引擎 Radar 2.0",
+        "source": "TechCrunch",
+        "date": "2026-05-12",
+        "relevance": "风控 AI 产品化范本,决策引擎 + LLM 混合架构",
+        "url": "https://techcrunch.com/2026/05/12/stripe-radar-ai-fraud"
+      },
+      {
+        "title": "Gartner: 2027 年 80% 金融机构将部署 AI Agent",
+        "source": "Gartner Research",
+        "date": "2026-05-10",
+        "relevance": "行业趋势报告,AI PRD 里引用增强说服力",
+        "url": "https://www.gartner.com/en/newsroom/2026-05-10-ai-agents-financial-services"
       }
     ]
   },

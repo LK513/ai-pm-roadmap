@@ -38,9 +38,12 @@ function todayStr() {
   return new Date().toISOString().split('T')[0];
 }
 
+/* ── Renderers ── */
+
 function renderHero(data) {
   document.getElementById('user-name').textContent = data.meta.userName;
   document.getElementById('north-star-quote').textContent = data.northStar.title;
+  document.getElementById('north-star-milestone').textContent = data.northStar.milestone;
   document.getElementById('current-quarter').textContent = data.progress.currentQuarter;
   document.getElementById('current-theme').textContent = data.progress.currentTheme;
   document.getElementById('milestone-text').textContent = data.northStar.milestone;
@@ -49,102 +52,121 @@ function renderHero(data) {
 }
 
 function renderPhases(progress) {
-  const list = document.getElementById('phases-list');
-  list.innerHTML = '';
+  const el = document.getElementById('phases-list');
+  el.innerHTML = '';
   progress.phases.forEach(p => {
+    const cls = p.status === '完成' ? 'phase--done' : p.status === '进行中' ? 'phase--active' : 'phase--pending';
     const row = document.createElement('div');
-    const cls = p.status === '完成' ? 'completed' : p.status === '进行中' ? 'active' : '';
-    row.className = `phase-row ${cls}`;
+    row.className = `phase ${cls}`;
     row.innerHTML = `
-      <span class="phase-quarter">${p.quarter}</span>
-      <div class="phase-info">
-        <div class="phase-theme">${p.theme}</div>
-        <div class="phase-status">${p.status}</div>
+      <span class="phase__quarter">${p.quarter}</span>
+      <div class="phase__info">
+        <div class="phase__theme">${p.theme}</div>
+        <div class="phase__status"><span class="phase__status-dot"></span>${p.status}</div>
       </div>
-      <div class="phase-progress">
-        <div class="progress-bar"><div class="progress-fill" style="width: ${p.progress}%"></div></div>
-        <span>${p.progress}%</span>
+      <div class="phase__bar">
+        <div class="phase__progress-track"><div class="phase__progress-fill" style="width:${p.progress}%"></div></div>
+        <span class="phase__pct">${p.progress}%</span>
       </div>
     `;
-    list.appendChild(row);
+    el.appendChild(row);
   });
 }
 
 function renderTasks(thisWeek) {
-  document.getElementById('week-of').textContent = `· ${thisWeek.weekOf} 起`;
-  const list = document.getElementById('tasks-list');
-  list.innerHTML = '';
+  document.getElementById('week-of').textContent = thisWeek.weekOf;
+  const el = document.getElementById('tasks-list');
+  el.innerHTML = '';
   thisWeek.tasks.forEach(t => {
     const row = document.createElement('li');
-    row.className = `task-row ${t.done ? 'done' : ''}`;
+    row.className = `task ${t.done ? 'task--done' : ''}`;
     row.innerHTML = `
-      <span class="task-checkbox" aria-label="${t.done ? '已完成' : '未完成'}">${t.done ? '✓' : ''}</span>
-      <span class="task-text">${t.task}</span>
+      <span class="task__check" aria-label="${t.done ? '已完成' : '未完成'}">${t.done ? '✓' : ''}</span>
+      <span class="task__text">${escapeHtml(t.task)}</span>
     `;
-    list.appendChild(row);
+    el.appendChild(row);
   });
 }
 
 function renderFrontier(frontier) {
   const ago = daysAgo(frontier.lastFrontierUpdate);
-  let label;
-  if (ago <= 0) label = '今天更新';
-  else if (ago === 1) label = '昨天更新';
-  else label = `${ago} 天前更新`;
-  document.getElementById('frontier-update').textContent = `· ${label}`;
 
-  const list = document.getElementById('frontier-list');
-  list.innerHTML = '';
+  // Badge
+  const badge = document.getElementById('frontier-badge');
+  if (ago <= 0) {
+    badge.textContent = '今日更新';
+    badge.className = 'card-badge card-badge--green';
+  } else if (ago === 1) {
+    badge.textContent = '昨天更新';
+    badge.className = 'card-badge';
+  } else {
+    badge.textContent = `${ago}天前`;
+    badge.className = 'card-badge card-badge--stale';
+  }
+
+  // Items
+  const el = document.getElementById('frontier-list');
+  el.innerHTML = '';
   frontier.items.forEach(item => {
-    const row = document.createElement('li');
-    row.className = 'frontier-row';
+    const row = document.createElement('a');
+    row.className = 'frontier-item';
+    row.href = item.url || '#';
+    row.target = '_blank';
+    row.rel = 'noopener';
     row.innerHTML = `
-      <div class="frontier-title">${escapeHtml(item.title)}</div>
-      <div class="frontier-meta">${escapeHtml(item.source)} · ${item.date}</div>
-      <div class="frontier-relevance">💡 ${escapeHtml(item.relevance)}</div>
+      <div class="frontier-item__head">
+        <span class="frontier-item__title">${escapeHtml(item.title)}</span>
+        <span class="frontier-item__arrow">→</span>
+      </div>
+      <div class="frontier-item__meta">
+        <span class="frontier-item__tag">${escapeHtml(item.source)}</span>
+        <span>${item.date}</span>
+      </div>
+      <div class="frontier-item__relevance">${escapeHtml(item.relevance)}</div>
     `;
-    list.appendChild(row);
+    el.appendChild(row);
   });
 
-  const actionEl = document.getElementById('frontier-action');
+  // Update bar
+  const bar = document.getElementById('frontier-action');
   if (ago >= 1) {
-    actionEl.innerHTML = `${ago} 天没更新了 <button class="btn-update-frontier" id="btn-copy-prompt">复制更新提示词</button>`;
+    bar.innerHTML = `<span>${ago} 天没更新了</span><button class="btn-copy" id="btn-copy-prompt">复制更新提示词</button>`;
     document.getElementById('btn-copy-prompt').addEventListener('click', copyUpdatePrompt);
   } else {
-    actionEl.textContent = '今日已更新 ✓';
+    bar.innerHTML = '<span class="frontier-updated">今日已更新 ✓</span>';
   }
 }
 
 function copyUpdatePrompt() {
-  const prompt = '请用 WebSearch 获取今日 AI 行业前沿动态(3 条,聚焦消金/金融/PM 视角),写入 D:\\AI-PM\\data.json 的 frontier.items 字段,更新 lastFrontierUpdate,然后 git commit + push。';
+  const prompt = '请用 WebSearch 获取今日 AI 行业前沿动态(10 条,聚焦消金/金融/PM 视角,每条附原文链接),写入 D:\\AI-PM\\data.json 的 frontier.items 字段,更新 lastFrontierUpdate,然后 git commit + push。';
   if (navigator.clipboard) {
     navigator.clipboard.writeText(prompt).then(
-      () => showToast('提示词已复制,粘贴给 Claude'),
-      () => showToast('复制失败,手动复制: ' + prompt)
+      () => showToast('已复制,粘贴给 Claude'),
+      () => showToast('复制失败,手动复制')
     );
   } else {
-    showToast('请手动复制: ' + prompt);
+    showToast('请手动复制提示词');
   }
 }
 
 function renderReflections(reflections) {
-  const list = document.getElementById('reflections-list');
-  list.innerHTML = '';
+  const el = document.getElementById('reflections-list');
+  el.innerHTML = '';
   if (!reflections || reflections.length === 0) {
-    list.innerHTML = '<li class="reflection-row"><div class="reflection-content" style="color: var(--slate-600); font-style: italic;">还没有反思,通过下面"💭 反思"按钮记录第一条吧</div></li>';
+    el.innerHTML = '<div class="reflection-empty">还没有反思记录,点上面「💭 反思」按钮开始</div>';
     return;
   }
-  reflections.slice(0, 3).forEach(r => {
-    const row = document.createElement('li');
-    row.className = 'reflection-row';
+  reflections.slice(0, 5).forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'reflection';
     row.innerHTML = `
-      <div class="reflection-meta">
-        <span>${r.date}</span>
-        <span class="reflection-tag">${escapeHtml(r.tag)}</span>
+      <div class="reflection__head">
+        <span class="reflection__date">${r.date}</span>
+        <span class="reflection__tag">${escapeHtml(r.tag)}</span>
       </div>
-      <div class="reflection-content">${escapeHtml(r.content)}</div>
+      <div class="reflection__content">${escapeHtml(r.content)}</div>
     `;
-    list.appendChild(row);
+    el.appendChild(row);
   });
 }
 
@@ -167,6 +189,8 @@ function renderFooter(data) {
   document.getElementById('issues-link').href = ISSUES_URL;
 }
 
+/* ── Utils ── */
+
 function showToast(msg) {
   const t = document.createElement('div');
   t.className = 'toast';
@@ -184,6 +208,8 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+/* ── Main ── */
 
 (async function main() {
   const data = await loadData();

@@ -6,69 +6,93 @@
   <title>AI-PM 转型路线图</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Caveat:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
 
+    <!-- Hero -->
     <header class="hero">
       <p class="hero-greeting">Hi, <span id="user-name">…</span></p>
       <h1 class="hero-quote" id="north-star-quote">…</h1>
-      <p class="hero-meta">
-        <span class="hero-current">现在: <strong id="current-quarter">…</strong> · <span id="current-theme">…</span></span>
-        <span class="hero-divider">·</span>
-        <span class="hero-countdown">距 <span id="milestone-text">…</span> 还有 <strong id="days-remaining">…</strong> 天</span>
-      </p>
+      <p class="hero-subtitle" id="north-star-milestone">…</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><strong id="current-quarter">…</strong> <span id="current-theme">…</span></span>
+        <span class="hero-chip countdown">距 <span id="milestone-text">…</span> <strong id="days-remaining">…</strong> 天</span>
+      </div>
     </header>
 
-    <main class="quadrants">
+    <!-- Quick Actions — most prominent position -->
+    <nav class="quick-actions" aria-label="快速记录">
+      <a class="qa-btn qa-btn--reflect" href="" id="btn-reflect" target="_blank" rel="noopener">
+        <span class="qa-btn__icon">💭</span> 反思
+      </a>
+      <a class="qa-btn qa-btn--idea" href="" id="btn-idea" target="_blank" rel="noopener">
+        <span class="qa-btn__icon">💡</span> 灵感
+      </a>
+      <a class="qa-btn qa-btn--resource" href="" id="btn-resource" target="_blank" rel="noopener">
+        <span class="qa-btn__icon">📚</span> 资源
+      </a>
+      <a class="qa-btn qa-btn--blocker" href="" id="btn-blocker" target="_blank" rel="noopener">
+        <span class="qa-btn__icon">🚧</span> 卡壳
+      </a>
+    </nav>
 
-      <section class="quadrant card-progress">
-        <h2 class="card-title">📊 1 年路线</h2>
-        <div id="phases-list"></div>
+    <!-- Content Cards -->
+    <main>
+
+      <!-- Progress / 1-year Roadmap -->
+      <section class="card card--progress">
+        <div class="card-header">
+          <h2 class="card-title"><span class="card-title__icon">◈</span> 1 年路线</h2>
+        </div>
+        <div class="phases" id="phases-list"></div>
       </section>
 
-      <section class="quadrant card-tasks">
-        <h2 class="card-title">📝 本周任务<span class="weekof" id="week-of"></span></h2>
-        <ul id="tasks-list"></ul>
+      <!-- This Week Tasks -->
+      <section class="card card--tasks">
+        <div class="card-header">
+          <h2 class="card-title"><span class="card-title__icon">◈</span> 本周任务</h2>
+          <span class="card-badge card-badge--green" id="week-of"></span>
+        </div>
+        <ul class="tasks" id="tasks-list"></ul>
       </section>
 
-      <section class="quadrant card-frontier">
-        <h2 class="card-title">📡 AI 前沿<span class="last-update" id="frontier-update"></span></h2>
-        <ul id="frontier-list"></ul>
-        <p class="card-action" id="frontier-action"></p>
+      <!-- AI Frontier -->
+      <section class="card card--frontier">
+        <div class="card-header">
+          <h2 class="card-title"><span class="card-title__icon">◈</span> AI 前沿</h2>
+          <span class="card-badge" id="frontier-badge"></span>
+        </div>
+        <div class="frontier-grid" id="frontier-list"></div>
+        <div class="frontier-update-bar" id="frontier-action"></div>
       </section>
 
-      <section class="quadrant card-reflection">
-        <h2 class="card-title">💭 近期反思</h2>
-        <ul id="reflections-list"></ul>
+      <!-- Reflections -->
+      <section class="card card--reflection">
+        <div class="card-header">
+          <h2 class="card-title"><span class="card-title__icon">◈</span> 近期反思</h2>
+        </div>
+        <div class="reflections" id="reflections-list"></div>
       </section>
 
     </main>
 
-    <section class="feedback-bar">
-      <p class="feedback-label">想到啥?手机/电脑 30 秒记下来</p>
-      <div class="feedback-buttons">
-        <a class="fb-btn" href="" id="btn-reflect" target="_blank" rel="noopener">💭 反思</a>
-        <a class="fb-btn" href="" id="btn-idea" target="_blank" rel="noopener">💡 灵感</a>
-        <a class="fb-btn" href="" id="btn-resource" target="_blank" rel="noopener">📚 资源</a>
-        <a class="fb-btn" href="" id="btn-blocker" target="_blank" rel="noopener">🚧 卡壳</a>
-      </div>
-    </section>
-
+    <!-- Footer -->
     <footer class="footer">
-      <span>📅 数据更新: <span id="last-update">…</span></span>
-      <span class="dot">·</span>
+      <span>数据更新: <span id="last-update">…</span></span>
+      <span class="footer__dot">·</span>
       <a id="repo-link" href="" target="_blank" rel="noopener">仓库</a>
-      <span class="dot">·</span>
+      <span class="footer__dot">·</span>
       <a id="issues-link" href="" target="_blank" rel="noopener">所有反馈</a>
     </footer>
 
+    <!-- Error -->
     <div id="error-banner" class="error-banner hidden">
-      <h2>⚠ 数据加载失败</h2>
+      <h2>数据加载失败</h2>
       <pre id="error-message"></pre>
-      <p>请联系 Claude:"检查 data.json 格式"</p>
+      <p>请联系 Claude: "检查 data.json 格式"</p>
     </div>
 
   </div>
