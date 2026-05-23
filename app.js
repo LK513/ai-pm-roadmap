@@ -5,28 +5,22 @@ const NEW_ISSUE_URL = `${REPO_URL}/issues/new`;
 const TASKS_KEY = 'ai-pm-tasks';
 const WEEK_KEY = 'ai-pm-tasks-week';
 
-/* ── Data Loading ── */
-
+/* ── Data ── */
 async function loadData() {
   try {
     const res = await fetch('data.json?t=' + Date.now());
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch (e) {
-    showError(e.message);
+    document.getElementById('error-banner').classList.remove('hidden');
+    document.getElementById('error-message').textContent = e.message;
     return null;
   }
 }
 
-function showError(msg) {
-  document.getElementById('error-banner').classList.remove('hidden');
-  document.getElementById('error-message').textContent = msg;
-}
-
 /* ── Date Utils ── */
-
-function daysBetween(a, b) {
-  return Math.round((new Date(b) - new Date(a)) / 86400000);
+function daysLeft(dateStr) {
+  return Math.max(0, Math.round((new Date(dateStr) - new Date()) / 86400000));
 }
 
 function daysAgo(s) {
@@ -35,62 +29,53 @@ function daysAgo(s) {
   return Math.floor((t - d) / 86400000);
 }
 
-function todayStr() {
-  return new Date().toISOString().split('T')[0];
-}
-
-/* ── Task State (localStorage) ── */
-
-function loadTasks(defaultTasks, weekOf) {
-  const savedWeek = localStorage.getItem(WEEK_KEY);
-  // If week changed, reset to defaults
-  if (savedWeek !== weekOf) {
-    localStorage.setItem(WEEK_KEY, weekOf);
-    localStorage.removeItem(TASKS_KEY);
-  }
-  try {
-    const saved = JSON.parse(localStorage.getItem(TASKS_KEY));
-    if (Array.isArray(saved) && saved.length > 0) return saved;
-  } catch {}
-  // Return defaults from data.json
-  return defaultTasks.map(t => ({ id: t.id, text: t.task, done: t.done }));
-}
-
-function saveTasks(tasks) {
-  localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
-}
-
-function nextTaskId(tasks) {
-  return tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
-}
-
-/* ── Renderers ── */
-
-function renderSidebar(data) {
+/* ── Hero ── */
+function renderHero(data) {
   document.getElementById('north-star-quote').textContent = data.northStar.title;
   document.getElementById('north-star-milestone').textContent = data.northStar.milestone;
-  document.getElementById('current-quarter').textContent = data.progress.currentQuarter;
-  document.getElementById('current-theme').textContent = data.progress.currentTheme;
-  const days = daysBetween(todayStr(), data.meta.yearEnd);
-  document.getElementById('days-remaining').textContent = days > 0 ? days : 0;
-
-  const el = document.getElementById('phases-list');
-  el.innerHTML = '';
-  data.progress.phases.forEach(p => {
-    const cls = p.status === '完成' ? 'sidebar__phase--done'
-              : p.status === '进行中' ? 'sidebar__phase--active' : '';
-    const row = document.createElement('div');
-    row.className = `sidebar__phase ${cls}`;
-    row.innerHTML = `
-      <span class="sidebar__phase-q">${p.quarter}</span>
-      <span class="sidebar__phase-name">${p.theme}</span>
-      <span class="sidebar__phase-pct">${p.progress}%</span>
-    `;
-    el.appendChild(row);
-  });
 }
 
-function renderFeedbackButtons() {
+/* ── Timeline ── */
+function renderTimeline(progress) {
+  const el = document.getElementById('timeline');
+  el.innerHTML = '';
+
+  progress.phases.forEach((p, i) => {
+    // Node
+    const cls = p.status === '完成' ? 'tl-node--done'
+              : p.status === '进行中' ? 'tl-node--active' : '';
+    const node = document.createElement('div');
+    node.className = `tl-node ${cls}`;
+    node.innerHTML = `
+      <div class="tl-dot"></div>
+      <span class="tl-quarter">${p.quarter}</span>
+      <span class="tl-theme">${p.theme}</span>
+    `;
+    el.appendChild(node);
+
+    // Bar between nodes (not after last)
+    if (i < progress.phases.length - 1) {
+      const bar = document.createElement('div');
+      const next = progress.phases[i + 1];
+      const barCls = p.status === '完成' && next.status === '完成' ? 'tl-bar--done'
+                   : p.status === '完成' && next.status === '进行中' ? 'tl-bar--active'
+                   : '';
+      bar.className = `tl-bar ${barCls}`;
+      el.appendChild(bar);
+    }
+  });
+
+  // Countdown
+  const active = progress.phases.find(p => p.status === '进行中');
+  const cd = document.getElementById('countdown-area');
+  if (active) {
+    const left = daysLeft(active.endDate);
+    cd.innerHTML = `距 <strong>${active.quarter} ${active.theme}</strong> 结束还剩 <span class="countdown__days">${left}</span> 天`;
+  }
+}
+
+/* ── Quick Actions ── */
+function renderActions() {
   [
     { id: 'btn-reflect', tpl: 'reflection.md' },
     { id: 'btn-idea', tpl: 'idea.md' },
@@ -102,16 +87,31 @@ function renderFeedbackButtons() {
   });
 }
 
-/* ── Tasks (CRUD) ── */
-
-function renderTasks(defaultTasks, weekOf) {
-  document.getElementById('week-of').textContent = weekOf;
-  const tasks = loadTasks(defaultTasks, weekOf);
-  _renderTaskList(tasks, defaultTasks, weekOf);
-  _renderAddButton(tasks, defaultTasks, weekOf);
+/* ── Tasks CRUD ── */
+function loadTasks(defaults, weekOf) {
+  if (localStorage.getItem(WEEK_KEY) !== weekOf) {
+    localStorage.setItem(WEEK_KEY, weekOf);
+    localStorage.removeItem(TASKS_KEY);
+  }
+  try {
+    const s = JSON.parse(localStorage.getItem(TASKS_KEY));
+    if (Array.isArray(s) && s.length > 0) return s;
+  } catch {}
+  return defaults.map(t => ({ id: t.id, text: t.task, done: t.done }));
 }
 
-function _renderTaskList(tasks, defaultTasks, weekOf) {
+function saveTasks(tasks) {
+  localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+}
+
+function renderTasks(defaults, weekOf) {
+  document.getElementById('week-of').textContent = weekOf;
+  const tasks = loadTasks(defaults, weekOf);
+  drawTaskList(tasks, defaults, weekOf);
+  drawAddBtn(tasks, defaults, weekOf);
+}
+
+function drawTaskList(tasks, defaults, weekOf) {
   const list = document.getElementById('tasks-list');
   list.innerHTML = '';
 
@@ -119,17 +119,15 @@ function _renderTaskList(tasks, defaultTasks, weekOf) {
     const li = document.createElement('li');
     li.className = `task ${task.done ? 'task--done' : ''}`;
 
-    // Checkbox
     const check = document.createElement('span');
     check.className = 'task__check';
     check.textContent = task.done ? '✓' : '';
     check.addEventListener('click', () => {
       task.done = !task.done;
       saveTasks(tasks);
-      _renderTaskList(tasks, defaultTasks, weekOf);
+      drawTaskList(tasks, defaults, weekOf);
     });
 
-    // Editable text
     const text = document.createElement('span');
     text.className = 'task__text';
     text.textContent = task.text;
@@ -139,42 +137,32 @@ function _renderTaskList(tasks, defaultTasks, weekOf) {
       if (task.done) return;
       text.contentEditable = 'true';
       text.focus();
-      // Select all text
       const range = document.createRange();
       range.selectNodeContents(text);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
     });
 
     text.addEventListener('blur', () => {
       text.contentEditable = 'false';
-      const newText = text.textContent.trim();
-      if (newText && newText !== task.text) {
-        task.text = newText;
-        saveTasks(tasks);
-      } else if (!newText) {
-        text.textContent = task.text; // revert if empty
-      }
+      const v = text.textContent.trim();
+      if (v && v !== task.text) { task.text = v; saveTasks(tasks); }
+      else if (!v) { text.textContent = task.text; }
     });
 
-    text.addEventListener('keydown', (e) => {
+    text.addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); text.blur(); }
       if (e.key === 'Escape') { text.textContent = task.text; text.blur(); }
     });
 
-    // Delete
     const del = document.createElement('button');
     del.className = 'task__delete';
     del.textContent = '×';
     del.title = '删除';
     del.addEventListener('click', () => {
-      const idx = tasks.indexOf(task);
-      if (idx > -1) {
-        tasks.splice(idx, 1);
-        saveTasks(tasks);
-        _renderTaskList(tasks, defaultTasks, weekOf);
-      }
+      tasks.splice(tasks.indexOf(task), 1);
+      saveTasks(tasks);
+      drawTaskList(tasks, defaults, weekOf);
     });
 
     li.append(check, text, del);
@@ -182,12 +170,9 @@ function _renderTaskList(tasks, defaultTasks, weekOf) {
   });
 }
 
-function _renderAddButton(tasks, defaultTasks, weekOf) {
+function drawAddBtn(tasks, defaults, weekOf) {
   const area = document.getElementById('task-add-area');
   area.innerHTML = '';
-
-  // Check if input is already open
-  if (area.querySelector('.task-add__input')) return;
 
   const btn = document.createElement('button');
   btn.className = 'task-add__btn';
@@ -197,28 +182,17 @@ function _renderAddButton(tasks, defaultTasks, weekOf) {
     area.innerHTML = '';
     const input = document.createElement('input');
     input.className = 'task-add__input';
-    input.type = 'text';
-    input.placeholder = '输入新任务，回车确认';
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const text = input.value.trim();
-        if (text) {
-          tasks.push({ id: nextTaskId(tasks), text, done: false });
-          saveTasks(tasks);
-          _renderTaskList(tasks, defaultTasks, weekOf);
-        }
-        _renderAddButton(tasks, defaultTasks, weekOf);
+    input.placeholder = '输入任务，回车确认';
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && input.value.trim()) {
+        tasks.push({ id: Date.now(), text: input.value.trim(), done: false });
+        saveTasks(tasks);
+        drawTaskList(tasks, defaults, weekOf);
+        drawAddBtn(tasks, defaults, weekOf);
       }
-      if (e.key === 'Escape') {
-        _renderAddButton(tasks, defaultTasks, weekOf);
-      }
+      if (e.key === 'Escape') drawAddBtn(tasks, defaults, weekOf);
     });
-
-    input.addEventListener('blur', () => {
-      setTimeout(() => _renderAddButton(tasks, defaultTasks, weekOf), 100);
-    });
-
+    input.addEventListener('blur', () => setTimeout(() => drawAddBtn(tasks, defaults, weekOf), 100));
     area.appendChild(input);
     input.focus();
   });
@@ -227,21 +201,13 @@ function _renderAddButton(tasks, defaultTasks, weekOf) {
 }
 
 /* ── Frontier ── */
-
 function renderFrontier(frontier) {
   const ago = daysAgo(frontier.lastFrontierUpdate);
 
   const badge = document.getElementById('frontier-badge');
-  if (ago <= 0) {
-    badge.textContent = '今日更新';
-    badge.className = 'card__badge card__badge--green';
-  } else if (ago === 1) {
-    badge.textContent = '昨天';
-    badge.className = 'card__badge';
-  } else {
-    badge.textContent = `${ago}天前`;
-    badge.className = 'card__badge card__badge--stale';
-  }
+  if (ago <= 0) { badge.textContent = '今日更新'; badge.className = 'card__tag card__tag--green'; }
+  else if (ago === 1) { badge.textContent = '昨天'; badge.className = 'card__tag'; }
+  else { badge.textContent = `${ago}天前`; badge.className = 'card__tag card__tag--stale'; }
 
   const el = document.getElementById('frontier-list');
   el.innerHTML = '';
@@ -267,31 +233,25 @@ function renderFrontier(frontier) {
 
   const bar = document.getElementById('frontier-action');
   if (ago >= 1) {
-    bar.innerHTML = `<span>${ago} 天没更新了</span><button class="btn-copy" id="btn-copy-prompt">复制更新提示词</button>`;
-    document.getElementById('btn-copy-prompt').addEventListener('click', copyPrompt);
+    bar.innerHTML = `<span>${ago} 天没更新</span><button class="btn-copy" id="btn-copy-prompt">复制更新提示词</button>`;
+    document.getElementById('btn-copy-prompt').addEventListener('click', () => {
+      const p = '请用 WebSearch 获取今日 AI 行业前沿动态(10 条,聚焦消金/金融/PM 视角,每条附原文链接),写入 D:\\AI-PM\\data.json 的 frontier.items,更新 lastFrontierUpdate,然后 git commit + push。';
+      navigator.clipboard?.writeText(p).then(() => toast('已复制'), () => toast('复制失败'));
+    });
   } else {
     bar.innerHTML = '<span class="frontier-ok">今日已更新 ✓</span>';
   }
 }
 
-function copyPrompt() {
-  const p = '请用 WebSearch 获取今日 AI 行业前沿动态(10 条,聚焦消金/金融/PM 视角,每条附原文链接),写入 D:\\AI-PM\\data.json 的 frontier.items,更新 lastFrontierUpdate,然后 git commit + push。';
-  navigator.clipboard?.writeText(p).then(
-    () => toast('已复制,粘贴给 Claude'),
-    () => toast('复制失败')
-  );
-}
-
 /* ── Reflections ── */
-
-function renderReflections(reflections) {
+function renderReflections(refs) {
   const el = document.getElementById('reflections-list');
   el.innerHTML = '';
-  if (!reflections?.length) {
-    el.innerHTML = '<div class="reflection-empty">还没有反思，点侧边栏「💭 反思」开始</div>';
+  if (!refs?.length) {
+    el.innerHTML = '<div class="reflection-empty">还没有反思，点上面「💭 反思」开始</div>';
     return;
   }
-  reflections.slice(0, 5).forEach(r => {
+  refs.slice(0, 5).forEach(r => {
     const div = document.createElement('div');
     div.className = 'reflection';
     div.innerHTML = `
@@ -312,7 +272,6 @@ function renderFooter(data) {
 }
 
 /* ── Utils ── */
-
 function toast(msg) {
   const t = document.createElement('div');
   t.className = 'toast';
@@ -323,23 +282,23 @@ function toast(msg) {
 
 function esc(s) {
   if (s == null) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 /* ── Main ── */
-
 (async function main() {
   const data = await loadData();
   if (!data) return;
   try {
-    renderSidebar(data);
-    renderFeedbackButtons();
+    renderHero(data);
+    renderTimeline(data.progress);
+    renderActions();
     renderTasks(data.thisWeek.tasks, data.thisWeek.weekOf);
     renderFrontier(data.frontier);
     renderReflections(data.reflections);
     renderFooter(data);
   } catch (e) {
-    showError('渲染失败: ' + e.message);
-    console.error(e);
+    document.getElementById('error-banner').classList.remove('hidden');
+    document.getElementById('error-message').textContent = '渲染失败: ' + e.message;
   }
 })();

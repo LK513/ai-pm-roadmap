@@ -3,74 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI-PM 转型路线图</title>
+  <title>重生之我要当AI-PM</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h1 class="sidebar__title" id="north-star-quote">…</h1>
-      <p class="sidebar__subtitle" id="north-star-milestone">…</p>
+    <!-- Hero: centered title + milestone -->
+    <header class="hero">
+      <h1 class="hero__title" id="north-star-quote">…</h1>
+      <p class="hero__milestone" id="north-star-milestone">…</p>
+    </header>
 
-      <div class="sidebar__meta">
-        <span class="sidebar__chip"><strong id="current-quarter">…</strong> <span id="current-theme">…</span></span>
-        <span class="sidebar__chip sidebar__chip--countdown">距年底 <strong id="days-remaining">…</strong> 天</span>
-      </div>
+    <!-- Timeline: horizontal progress bar -->
+    <section class="timeline" id="timeline"></section>
 
-      <div class="sidebar__section-label">路线进度</div>
-      <div class="sidebar__phases" id="phases-list"></div>
+    <!-- Countdown: days left in current phase -->
+    <div class="countdown" id="countdown-area"></div>
 
-      <div class="sidebar__spacer"></div>
-
-      <nav class="sidebar__actions">
-        <span class="sidebar__actions-label">快速记录</span>
-        <a class="qa-btn qa-btn--reflect" href="" id="btn-reflect" target="_blank" rel="noopener">
-          <span class="qa-btn__icon">💭</span> 反思
-        </a>
-        <a class="qa-btn qa-btn--idea" href="" id="btn-idea" target="_blank" rel="noopener">
-          <span class="qa-btn__icon">💡</span> 灵感
-        </a>
-        <a class="qa-btn qa-btn--resource" href="" id="btn-resource" target="_blank" rel="noopener">
-          <span class="qa-btn__icon">📚</span> 资源
-        </a>
-        <a class="qa-btn qa-btn--blocker" href="" id="btn-blocker" target="_blank" rel="noopener">
-          <span class="qa-btn__icon">🚧</span> 卡壳
-        </a>
-      </nav>
-    </aside>
+    <!-- Quick Actions -->
+    <nav class="actions" aria-label="快速记录">
+      <a class="action action--reflect" href="" id="btn-reflect" target="_blank" rel="noopener">
+        <span class="action__icon">💭</span><span class="action__label">反思</span>
+      </a>
+      <a class="action action--idea" href="" id="btn-idea" target="_blank" rel="noopener">
+        <span class="action__icon">💡</span><span class="action__label">灵感</span>
+      </a>
+      <a class="action action--resource" href="" id="btn-resource" target="_blank" rel="noopener">
+        <span class="action__icon">📚</span><span class="action__label">资源</span>
+      </a>
+      <a class="action action--blocker" href="" id="btn-blocker" target="_blank" rel="noopener">
+        <span class="action__icon">🚧</span><span class="action__label">卡壳</span>
+      </a>
+    </nav>
 
     <!-- Main Content -->
-    <main class="main">
+    <main class="content">
 
       <!-- Tasks -->
       <section class="card card--tasks">
-        <div class="card__header">
+        <div class="card__head">
           <h2 class="card__title">本周任务</h2>
-          <span class="card__badge card__badge--green" id="week-of"></span>
+          <span class="card__tag card__tag--green" id="week-of"></span>
         </div>
         <ul class="task-list" id="tasks-list"></ul>
         <div class="task-add" id="task-add-area"></div>
       </section>
 
-      <!-- Frontier -->
-      <section class="card card--frontier">
-        <div class="card__header">
-          <h2 class="card__title">AI 前沿</h2>
-          <span class="card__badge" id="frontier-badge"></span>
-        </div>
-        <div class="frontier-grid" id="frontier-list"></div>
-        <div class="frontier-footer" id="frontier-action"></div>
-      </section>
+      <!-- Two columns: Frontier + Reflections -->
+      <div class="grid-2">
+        <!-- Frontier -->
+        <section class="card card--frontier">
+          <div class="card__head">
+            <h2 class="card__title">AI 前沿</h2>
+            <span class="card__tag" id="frontier-badge"></span>
+          </div>
+          <div class="frontier-list" id="frontier-list"></div>
+          <div class="frontier-footer" id="frontier-action"></div>
+        </section>
 
-      <!-- Reflections -->
-      <section class="card card--reflection">
-        <div class="card__header">
-          <h2 class="card__title">近期反思</h2>
-        </div>
-        <div class="reflections" id="reflections-list"></div>
-      </section>
+        <!-- Reflections -->
+        <section class="card card--reflection">
+          <div class="card__head">
+            <h2 class="card__title">近期反思</h2>
+          </div>
+          <div class="reflections" id="reflections-list"></div>
+        </section>
+      </div>
 
       <!-- Footer -->
       <footer class="footer">
@@ -82,14 +81,12 @@
       </footer>
     </main>
 
-    <!-- Error -->
     <div id="error-banner" class="error-banner hidden">
       <h2>数据加载失败</h2>
       <pre id="error-message"></pre>
     </div>
 
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>
