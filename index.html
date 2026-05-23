@@ -56,7 +56,10 @@
       <section class="card card--tasks">
         <div class="card__head">
           <h2 class="card__title">本周任务</h2>
-          <span class="card__tag card__tag--green" id="week-of"></span>
+          <div class="card__head-right">
+            <span class="card__tag card__tag--green" id="week-of"></span>
+            <button class="card__fetch-btn" id="btn-fetch-tasks" title="让 Claude 布置本周任务">⟳ 获取任务</button>
+          </div>
         </div>
         <ul class="task-list" id="tasks-list"></ul>
         <div class="task-add" id="task-add-area"></div>
@@ -66,7 +69,10 @@
         <section class="card card--frontier">
           <div class="card__head">
             <h2 class="card__title">AI 前沿</h2>
-            <span class="card__tag" id="frontier-badge"></span>
+            <div class="card__head-right">
+              <span class="card__tag" id="frontier-badge"></span>
+              <button class="card__fetch-btn" id="btn-fetch-frontier" title="让 Claude 更新前沿动态">⟳ 获取前沿</button>
+            </div>
           </div>
           <div class="frontier-list" id="frontier-list"></div>
           <div class="frontier-footer" id="frontier-action"></div>
