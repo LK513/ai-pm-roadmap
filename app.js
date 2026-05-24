@@ -89,7 +89,7 @@ function renderTimeline(progress) {
     const cls = p.status === '完成' ? 'tl-node--done' : p.status === '进行中' ? 'tl-node--active' : '';
     const n = document.createElement('div');
     n.className = `tl-node ${cls}`;
-    n.innerHTML = `<div class="tl-dot"></div><span class="tl-q">${p.quarter}</span>`;
+    n.innerHTML = `<div class="tl-dot"></div><span class="tl-q">${p.stage}</span>`;
     el.appendChild(n);
     if (i < progress.phases.length - 1) {
       const next = progress.phases[i+1];
@@ -101,7 +101,7 @@ function renderTimeline(progress) {
   const active = progress.phases.find(p => p.status === '进行中');
   const cd = document.getElementById('countdown-area');
   if (active) {
-    cd.innerHTML = `<strong>${active.quarter} ${active.theme}</strong> 还剩 <em>${daysLeft(active.endDate)}</em> 天`;
+    cd.innerHTML = `<strong>${active.stage} ${active.theme}</strong> 还剩 <em>${daysLeft(active.endDate)}</em> 天`;
   }
 }
 
@@ -419,14 +419,14 @@ function initEval() {
 
 /* ── Fetch ── */
 function initFetch(data) {
-  const q = data.progress.currentQuarter;
+  const stage = data.progress.currentStage;
   const theme = data.progress.currentTheme;
-  const pct = data.progress.phases.find(p => p.quarter === q)?.progress || 0;
+  const pct = data.progress.phases.find(p => p.stage === stage)?.progress || 0;
 
   const btnTasks = document.getElementById('btn-fetch-tasks');
   if (btnTasks) btnTasks.onclick = () => {
     const today = new Date().toISOString().split('T')[0];
-    navigator.clipboard?.writeText(`我是AI-PM转型中的产品经理，当前处于 ${q} ${theme}（${pct}%）。\n\n请布置本周（${today} 起）4-5个具体可执行任务，围绕当前阶段目标。\n\n写入 D:\\AI-PM\\data.json 的 thisWeek.tasks（{id, task, done}）和 thisWeek.weekOf（${today}），然后 git commit + push。`)
+    navigator.clipboard?.writeText(`我是AI-PM转型中的产品经理，当前处于 ${stage} ${theme}（${pct}%）。\n\n请布置本周（${today} 起）4-5个具体可执行任务，围绕当前阶段目标。\n\n写入 D:\\AI-PM\\data.json 的 thisWeek.tasks（{id, task, done}）和 thisWeek.weekOf（${today}），然后 git commit + push。`)
       .then(() => toast('已复制'), () => toast('复制失败'));
   };
 

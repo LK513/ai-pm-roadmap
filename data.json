@@ -14,43 +14,44 @@
     "quote": "Slow is smooth, smooth is fast"
   },
   "progress": {
-    "currentQuarter": "Q2",
-    "currentTheme": "场景识别期",
+    "currentStage": "Stage 1",
+    "currentTheme": "概念入门 + 工具搭建",
     "phases": [
       {
-        "quarter": "Q1",
-        "theme": "概念入门",
-        "status": "完成",
-        "progress": 100,
-        "startDate": "2026-01-01",
-        "endDate": "2026-03-31",
-        "deliverables": ["读完《Building AI Products》", "AI 行业图谱整理", "5 个 AI 工具实操"]
+        "stage": "Stage 1",
+        "theme": "概念入门 + 工具搭建",
+        "status": "进行中",
+        "progress": 40,
+        "startDate": "2026-05-23",
+        "endDate": "2026-07-31",
+        "deliverables": ["读完《Building AI Products》", "AI 行业图谱整理", "5 个 AI 工具实操", "看板搭建完成 ✓"],
+        "notes": "看板已搭建完成，但学习目标尚未达成。Book 进度约30%，行业图谱和工具实操未开始。"
       },
       {
-        "quarter": "Q2",
+        "stage": "Stage 2",
         "theme": "场景识别",
-        "status": "进行中",
-        "progress": 35,
-        "startDate": "2026-04-01",
-        "endDate": "2026-06-30",
+        "status": "未开始",
+        "progress": 0,
+        "startDate": "2026-08-01",
+        "endDate": "2026-10-31",
         "deliverables": ["消金 3 大 AI 切入点分析", "数据可用性盘点", "竞品 AI 功能拆解"]
       },
       {
-        "quarter": "Q3",
+        "stage": "Stage 3",
         "theme": "写 AI PRD",
         "status": "未开始",
         "progress": 0,
-        "startDate": "2026-07-01",
-        "endDate": "2026-09-30",
+        "startDate": "2026-11-01",
+        "endDate": "2027-01-31",
         "deliverables": ["1 份完整 AI PRD", "数据/合规/质量三章模板", "技术评审过会"]
       },
       {
-        "quarter": "Q4",
+        "stage": "Stage 4",
         "theme": "推 AI 功能上线",
         "status": "未开始",
         "progress": 0,
-        "startDate": "2026-10-01",
-        "endDate": "2026-12-31",
+        "startDate": "2027-02-01",
+        "endDate": "2027-04-30",
         "deliverables": ["AI 功能 v1 上线", "数据效果回归", "项目复盘文档"]
       }
     ]
