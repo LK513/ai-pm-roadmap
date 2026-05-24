@@ -101,8 +101,21 @@ function renderTimeline(progress) {
   const active = progress.phases.find(p => p.status === '进行中');
   const cd = document.getElementById('countdown-area');
   if (active) {
-    cd.innerHTML = `<strong>${active.stage} ${active.theme}</strong> 还剩 <em>${daysLeft(active.endDate)}</em> 天`;
+    cd.innerHTML = `<strong>${active.stage} ${active.theme}</strong>`;
   }
+}
+
+/* ── Countdown Card (Hero) ── */
+function renderCountdownCard(progress) {
+  const active = progress.phases.find(p => p.status === '进行中');
+  const numEl = document.getElementById('countdown-num');
+  const pctEl = document.getElementById('stage-pct');
+  const ring = document.getElementById('countdown-ring');
+  const pct = active ? (active.progress || 0) : (progress.phases.every(p => p.status === '完成') ? 100 : 0);
+
+  if (numEl) numEl.textContent = active ? daysLeft(active.endDate) : '—';
+  if (pctEl) pctEl.textContent = `${pct}%`;
+  if (ring) ring.setAttribute('stroke-dashoffset', String(100 - pct));
 }
 
 /* ── Modal ── */
@@ -192,6 +205,15 @@ function renderTasks(defs, weekOf) {
   drawActive(active, tasks, defs, weekOf);
   drawDone(done);
   drawAdd(tasks, defs, weekOf);
+
+  // Hero metric strip 同步
+  const total = tasks.length || 0;
+  const rate = total ? Math.round((done.length / total) * 100) : 0;
+  const setText = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setText('m-tasks-active', active.length);
+  setText('m-tasks-done', done.length);
+  setText('m-tasks-rate', total ? `完成率 ${rate}%` : '尚未开局');
+  setText('m-tasks-hint', `${total} 项 · 在做`);
 }
 
 function drawActive(active, all, defs, weekOf) {
@@ -349,6 +371,11 @@ function renderFrontier(frontier) {
   } else {
     bar.innerHTML = '<span class="frontier-ok">今日已更新 ✓</span>';
   }
+
+  // Hero metric strip 同步
+  const setText = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setText('m-frontier', (frontier.items || []).length);
+  setText('m-frontier-hint', ago <= 0 ? '今日刚刷新' : `${ago} 天前刷新`);
 }
 
 function openFrontierModal(item) {
@@ -449,10 +476,28 @@ function initFetch(data) {
 /* ── Growth (AI 成长) ── */
 function renderGrowth(growth) {
   const el = document.getElementById('growth-list');
+  const setText = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  const sparkEl = document.getElementById('m-growth-spark');
+
   if (!el) return;
   if (!growth || !growth.items?.length) {
     el.innerHTML = '<div class="growth-empty">还没有训练记录</div>';
+    setText('m-growth-avg', '—');
+    if (sparkEl) sparkEl.innerHTML = '';
     return;
+  }
+
+  // Hero metric: 均值 + spark
+  const scores = growth.items.map(i => Number(i.overallScore) || 0).filter(n => n > 0);
+  const avg = scores.length ? Math.round(scores.reduce((a,b) => a+b, 0) / scores.length) : 0;
+  setText('m-growth-avg', avg ? avg : '—');
+  if (sparkEl) {
+    sparkEl.innerHTML = '';
+    scores.slice(-12).forEach(s => {
+      const bar = document.createElement('i');
+      bar.style.height = `${Math.max(6, Math.min(100, s))}%`;
+      sparkEl.appendChild(bar);
+    });
   }
   const cnt = document.getElementById('growth-count');
   if (cnt) cnt.textContent = growth.items.length;
@@ -580,6 +625,8 @@ function openGrowthModal(item) {
 function renderReflections(refs) {
   const el = document.getElementById('reflections-list');
   el.innerHTML = '';
+  const mEl = document.getElementById('m-reflections');
+  if (mEl) mEl.textContent = (refs && refs.length) ? refs.length : '—';
   if (!refs?.length) { el.innerHTML = '<div class="reflection-empty">还没有反思</div>'; return; }
   refs.slice(0, 5).forEach(r => {
     const d = document.createElement('div');
@@ -612,6 +659,7 @@ function esc(s) {
   try {
     renderHero(data);
     renderTimeline(data.progress);
+    renderCountdownCard(data.progress);
     initModal();
     initFetch(data);
     initEval();

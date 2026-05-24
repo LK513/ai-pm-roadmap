@@ -6,10 +6,28 @@
   <title>AI-PM Roadmap</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260524-2">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260524-4">
 </head>
 <body>
+
+  <!-- Ambient bg layers (CSS only, decorative) -->
+  <div class="bg-stars" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--2" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--3" aria-hidden="true"></div>
+  <div class="bg-meteors" aria-hidden="true">
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+    <span class="meteor"></span>
+  </div>
+  <div class="bg-noise" aria-hidden="true"></div>
 
   <!-- Side widget -->
   <aside class="side-widget" id="side-widget">
@@ -33,23 +51,120 @@
 
   <div id="app">
 
-    <!-- Compact hero -->
-    <header class="hero">
-      <h1 class="hero__title" id="north-star-quote">…</h1>
-      <p class="hero__sub" id="north-star-milestone">…</p>
+    <!-- HERO BANNER: 大字北极星 + 巨型倒计时 + 指标墙 -->
+    <header class="hero-banner">
+      <div class="hero-banner__brand">
+        <span class="brand-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 L15 9 L22 12 L15 15 L12 22 L9 15 L2 12 L9 9 Z"/>
+          </svg>
+        </span>
+        <span class="brand-text">AI-PM <em>Roadmap</em></span>
+        <span class="brand-status"><i></i>LIVE</span>
+      </div>
+
+      <div class="hero-banner__main">
+        <div class="hero-banner__left">
+          <div class="hero-eyebrow">NORTH STAR · 北极星</div>
+          <h1 class="hero-title" id="north-star-quote">…</h1>
+          <p class="hero-sub" id="north-star-milestone">…</p>
+        </div>
+
+        <div class="hero-banner__right">
+          <div class="countdown-card" id="countdown-card">
+            <div class="countdown-card__label">距阶段截止</div>
+            <div class="countdown-card__num" id="countdown-num">--</div>
+            <div class="countdown-card__unit">DAYS</div>
+            <div class="countdown-card__hint" id="countdown-area"></div>
+            <svg class="countdown-card__ring" viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none"/>
+              <circle id="countdown-ring" cx="40" cy="40" r="34" stroke="url(#ringGrad)" stroke-width="3" fill="none"
+                      stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"
+                      transform="rotate(-90 40 40)"/>
+              <defs>
+                <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#FF6B35"/>
+                  <stop offset="100%" stop-color="#FFB800"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metric strip -->
+      <div class="metric-strip" id="metric-strip">
+        <div class="metric metric--orange">
+          <div class="metric__icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="metric__body">
+            <div class="metric__num" id="m-tasks-active">--</div>
+            <div class="metric__label">本周任务</div>
+          </div>
+          <div class="metric__hint" id="m-tasks-hint">— 在做</div>
+        </div>
+
+        <div class="metric metric--green">
+          <div class="metric__icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="metric__body">
+            <div class="metric__num" id="m-tasks-done">--</div>
+            <div class="metric__label">已完成</div>
+          </div>
+          <div class="metric__hint" id="m-tasks-rate">完成率 --</div>
+        </div>
+
+        <div class="metric metric--purple">
+          <div class="metric__icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="metric__body">
+            <div class="metric__num" id="m-growth-avg">--</div>
+            <div class="metric__label">成长分均值</div>
+          </div>
+          <div class="metric__spark" id="m-growth-spark"></div>
+        </div>
+
+        <div class="metric metric--cyan">
+          <div class="metric__icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
+          <div class="metric__body">
+            <div class="metric__num" id="m-frontier">--</div>
+            <div class="metric__label">前沿动态</div>
+          </div>
+          <div class="metric__hint" id="m-frontier-hint">— 天前</div>
+        </div>
+
+        <div class="metric metric--amber">
+          <div class="metric__icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <div class="metric__body">
+            <div class="metric__num" id="m-reflections">--</div>
+            <div class="metric__label">近期反思</div>
+          </div>
+          <div class="metric__hint">条</div>
+        </div>
+      </div>
+
+      <!-- Stage timeline -->
+      <div class="stage-rail">
+        <div class="stage-rail__title">
+          <span>阶段进程</span>
+          <span class="stage-rail__pct" id="stage-pct">— %</span>
+        </div>
+        <div class="stage-rail__track" id="timeline"></div>
+      </div>
     </header>
 
-    <!-- Stats bar: timeline + countdown inline -->
-    <div class="stats-bar">
-      <div class="stats-bar__timeline" id="timeline"></div>
-      <div class="stats-bar__countdown" id="countdown-area"></div>
-    </div>
+    <!-- BENTO MAIN -->
+    <main class="bento">
 
-    <!-- Main content -->
-    <main class="main">
-
-      <!-- Active tasks -->
-      <section class="panel panel--tasks">
+      <!-- 本周任务 — 强焦点（橙） -->
+      <section class="panel panel--tasks panel--accent-orange bento__tasks">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
@@ -64,53 +179,8 @@
         <div class="task-add" id="task-add-area"></div>
       </section>
 
-      <!-- Completed tasks (separate panel) -->
-      <section class="panel panel--done hidden" id="completed-section">
-        <div class="panel__head">
-          <h2 class="panel__title panel__title--muted">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            已完成
-            <span class="panel__count" id="completed-count"></span>
-          </h2>
-          <button class="btn-sm btn-sm--ghost" id="btn-eval">月度评价</button>
-        </div>
-        <div class="done-list" id="completed-list"></div>
-      </section>
-
-      <!-- Two columns: frontier + hot tools -->
-      <div class="grid-2">
-        <section class="panel panel--frontier">
-          <div class="panel__head">
-            <h2 class="panel__title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-              AI 前沿
-            </h2>
-            <div class="panel__tools">
-              <span class="panel__badge" id="frontier-badge"></span>
-              <button class="btn-sm" id="btn-fetch-frontier">获取前沿</button>
-            </div>
-          </div>
-          <div class="frontier-list" id="frontier-list"></div>
-          <div class="frontier-footer" id="frontier-action"></div>
-        </section>
-
-        <section class="panel panel--hot-tools">
-          <div class="panel__head">
-            <h2 class="panel__title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-              热门工具
-            </h2>
-            <div class="panel__tools">
-              <span class="panel__badge" id="hot-tools-badge"></span>
-              <button class="btn-sm" id="btn-fetch-tools">刷新工具</button>
-            </div>
-          </div>
-          <div class="hot-tools-list" id="hot-tools-list"></div>
-        </section>
-      </div>
-
-      <!-- AI 成长（每次训练会话一条记录） -->
-      <section class="panel panel--growth">
+      <!-- AI 成长 — 紫 -->
+      <section class="panel panel--growth panel--accent-purple bento__growth">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -124,8 +194,52 @@
         <div class="growth-list" id="growth-list"></div>
       </section>
 
-      <!-- Reflections (full width) -->
-      <section class="panel panel--reflection">
+      <!-- 前沿 — 蓝 -->
+      <section class="panel panel--frontier panel--accent-blue bento__frontier">
+        <div class="panel__head">
+          <h2 class="panel__title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            AI 前沿
+          </h2>
+          <div class="panel__tools">
+            <span class="panel__badge" id="frontier-badge"></span>
+            <button class="btn-sm" id="btn-fetch-frontier">获取前沿</button>
+          </div>
+        </div>
+        <div class="frontier-list" id="frontier-list"></div>
+        <div class="frontier-footer" id="frontier-action"></div>
+      </section>
+
+      <!-- 热门工具 — 绿 -->
+      <section class="panel panel--hot-tools panel--accent-green bento__tools">
+        <div class="panel__head">
+          <h2 class="panel__title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            热门工具
+          </h2>
+          <div class="panel__tools">
+            <span class="panel__badge" id="hot-tools-badge"></span>
+            <button class="btn-sm" id="btn-fetch-tools">刷新工具</button>
+          </div>
+        </div>
+        <div class="hot-tools-list" id="hot-tools-list"></div>
+      </section>
+
+      <!-- 已完成 — 灰 -->
+      <section class="panel panel--done panel--accent-muted bento__done hidden" id="completed-section">
+        <div class="panel__head">
+          <h2 class="panel__title panel__title--muted">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            已完成
+            <span class="panel__count" id="completed-count"></span>
+          </h2>
+          <button class="btn-sm btn-sm--ghost" id="btn-eval">月度评价</button>
+        </div>
+        <div class="done-list" id="completed-list"></div>
+      </section>
+
+      <!-- 反思 — 金 -->
+      <section class="panel panel--reflection panel--accent-amber bento__reflection">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -135,14 +249,15 @@
         <div class="reflections" id="reflections-list"></div>
       </section>
 
-      <footer class="footer">
-        <span>更新 <span id="last-update">…</span></span>
-        <span class="footer__sep">·</span>
-        <a id="repo-link" href="" target="_blank" rel="noopener">GitHub</a>
-        <span class="footer__sep">·</span>
-        <a id="issues-link" href="" target="_blank" rel="noopener">反馈</a>
-      </footer>
     </main>
+
+    <footer class="footer">
+      <span>更新 <span id="last-update">…</span></span>
+      <span class="footer__sep">·</span>
+      <a id="repo-link" href="" target="_blank" rel="noopener">GitHub</a>
+      <span class="footer__sep">·</span>
+      <a id="issues-link" href="" target="_blank" rel="noopener">反馈</a>
+    </footer>
 
     <!-- Modal -->
     <div class="modal-overlay" id="modal-overlay">
@@ -167,6 +282,6 @@
     </div>
 
   </div>
-  <script src="app.js?v=20260524-2"></script>
+  <script src="app.js?v=20260524-4"></script>
 </body>
-<!-- fix 1779552340 --></html>
+</html>
