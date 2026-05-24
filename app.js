@@ -124,6 +124,9 @@ function openModal(title, html, btnLabel, onSubmit) {
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
 function initModal() {
+  // 把 modal-overlay 移到 body 直接子节点，避免 #app 的 page-in 动画 transform 把 fixed 退化为 absolute
+  const overlay = document.getElementById('modal-overlay');
+  if (overlay && overlay.parentElement !== document.body) document.body.appendChild(overlay);
   document.getElementById('modal-close').onclick = closeModal;
   document.getElementById('modal-cancel').onclick = closeModal;
   document.getElementById('modal-overlay').onclick = e => { if (e.target.id === 'modal-overlay') closeModal(); };
