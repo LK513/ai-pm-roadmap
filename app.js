@@ -357,6 +357,52 @@ function openFrontierModal(item) {
   openModal(esc(item.title), html, '关闭', closeModal);
 }
 
+/* ── Hot Tools ── */
+function renderHotTools(hotTools) {
+  if (!hotTools) return;
+  const ago = daysAgo(hotTools.lastToolsUpdate);
+  const badge = document.getElementById('hot-tools-badge');
+  if (badge) {
+    if (ago <= 0) { badge.textContent = '今日'; badge.className = 'panel__badge panel__badge--green'; }
+    else if (ago <= 7) { badge.textContent = `${ago}天前`; badge.className = 'panel__badge'; }
+    else { badge.textContent = `${ago}天前`; badge.className = 'panel__badge panel__badge--stale'; }
+  }
+  const el = document.getElementById('hot-tools-list');
+  if (!el) return;
+  el.innerHTML = '';
+  (hotTools.items || []).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'hot-tool';
+    const typeCls = item.type === 'mcp' ? 'hot-tool__type--mcp' : 'hot-tool__type--skill';
+    const typeText = item.type === 'mcp' ? 'MCP' : 'SKILL';
+    div.innerHTML = `
+      <div class="hot-tool__row">
+        <span class="hot-tool__type ${typeCls}">${typeText}</span>
+        <span class="hot-tool__title">${esc(item.title)}</span>
+        <span class="hot-tool__stars">★ ${item.stars}</span>
+      </div>
+      <div class="hot-tool__meta">
+        <span class="hot-tool__author">${esc(item.author)}</span>
+        ${item.tag ? `<span class="hot-tool__tag">${esc(item.tag)}</span>` : ''}
+      </div>
+      <div class="hot-tool__rel">${esc(item.relevance)}</div>`;
+    div.onclick = () => openHotToolModal(item);
+    el.appendChild(div);
+  });
+}
+
+function openHotToolModal(item) {
+  const link = item.url ? `<a class="fm-link" href="${esc(item.url)}" target="_blank" rel="noopener">查看仓库 →</a>` : '';
+  const html = `
+    <div class="fm-meta">
+      <span class="frontier-item__tag">${item.type === 'mcp' ? 'MCP' : 'SKILL'}</span>
+      <span>${esc(item.author)} · ★ ${item.stars}</span>
+    </div>
+    <div class="fm-relevance">${esc(item.relevance)}</div>
+    ${link}`;
+  openModal(esc(item.title), html, '关闭', closeModal);
+}
+
 /* ── Eval ── */
 function initEval() {
   const btnEval = document.getElementById('btn-eval');
@@ -387,6 +433,12 @@ function initFetch(data) {
   const btnFrontier = document.getElementById('btn-fetch-frontier');
   if (btnFrontier) btnFrontier.onclick = () => {
     navigator.clipboard?.writeText('请用 WebSearch 获取今日 AI 行业前沿动态（10 条，聚焦消金/金融/PM 视角），每条含 title/source/date/relevance/url/content（摘要200-300字）。写入 D:\\AI-PM\\data.json 的 frontier.items，更新 lastFrontierUpdate，然后 git commit + push。')
+      .then(() => toast('已复制'), () => toast('复制失败'));
+  };
+
+  const btnTools = document.getElementById('btn-fetch-tools');
+  if (btnTools) btnTools.onclick = () => {
+    navigator.clipboard?.writeText('请用 `gh search repos --sort stars --limit 15 --json name,owner,description,stargazersCount,url,updatedAt "claude skill"` 和 "mcp server" 各拉一批，从消金 PM 视角筛 5 个 skill + 5 个 mcp 共 10 条，写入 D:\\AI-PM\\data.json 的 hotTools.items（字段: type/title/author/stars/url/tag/relevance），更新 lastToolsUpdate=今日，然后 git commit + push。')
       .then(() => toast('已复制'), () => toast('复制失败'));
   };
 }
@@ -432,6 +484,7 @@ function esc(s) {
     initEval();
     renderTasks(data.thisWeek.tasks, data.thisWeek.weekOf);
     renderFrontier(data.frontier);
+    renderHotTools(data.hotTools);
     renderReflections(data.reflections);
     renderFooter(data);
   } catch (e) {

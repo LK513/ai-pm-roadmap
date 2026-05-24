@@ -61,7 +61,12 @@
       {"id": 1, "task": "完成《Building AI Products》第 3 章", "done": true},
       {"id": 2, "task": "梳理消金场景中 3 个 AI 可能切入点", "done": false},
       {"id": 3, "task": "和数据团队对一次,问数据可用性", "done": false},
-      {"id": 4, "task": "拆解 1 个同行 AI 智能客服 PRD", "done": false}
+      {"id": 4, "task": "拆解 1 个同行 AI 智能客服 PRD", "done": false},
+      {"id": 5, "task": "写催收方言识别场景可行性分析(2 页内)", "done": false},
+      {"id": 6, "task": "盘点催收外呼数据可用性(标注样本量+合规口径)", "done": false},
+      {"id": 7, "task": "拆解信也科技 AI 智能客服 PRD(数据/合规/质量三章)", "done": false},
+      {"id": 8, "task": "围绕 Stripe Radar 2.0 写 1 篇观察笔记", "done": false},
+      {"id": 9, "task": "Q2 候选场景收敛会(从 3 选 1,定 Q3 PRD 主题)", "done": false}
     ]
   },
   "frontier": {
@@ -146,6 +151,101 @@
         "relevance": "行业趋势报告,AI PRD 里引用增强说服力",
         "url": "https://www.gartner.com/en/newsroom/2026-05-10-ai-agents-financial-services",
         "content": "Gartner 发布最新研究报告预测：到 2027 年底，全球 80% 的金融机构将部署至少一个 AI Agent 系统。报告关键发现：1) 当前已有 35% 的金融机构在试点 AI Agent，主要集中在客服和风控场景；2) 预计 2026-2027 年将是 AI Agent 在金融行业的大规模部署期；3) 最大的障碍是合规和可解释性要求，其次是数据质量问题；4) 率先部署的机构预计将获得 15-20% 的运营效率提升。报告建议金融机构现在就开始 AI Agent 的能力建设，包括数据治理、模型评估体系、合规框架等。对于写 AI PRD 来说，引用 Gartner 的预测数据可以显著增强说服力——'80% 金融机构将部署 AI Agent'是一个很有冲击力的数字。"
+      }
+    ]
+  },
+  "hotTools": {
+    "lastToolsUpdate": "2026-05-24",
+    "items": [
+      {
+        "type": "skill",
+        "title": "anthropics/skills",
+        "author": "anthropics",
+        "stars": 4200,
+        "url": "https://github.com/anthropics/skills",
+        "tag": "官方",
+        "relevance": "Anthropic 官方 skill 合集,document-skills 系列直接可用,做 AI PRD 模板时可拆其结构"
+      },
+      {
+        "type": "skill",
+        "title": "obra/superpowers",
+        "author": "obra",
+        "stars": 1830,
+        "url": "https://github.com/obra/superpowers",
+        "tag": "热门",
+        "relevance": "高质量 Claude Code skill 集合,brainstorming/debugging/test-driven-development 可借鉴 PM 工作流"
+      },
+      {
+        "type": "skill",
+        "title": "Humanizer-zh",
+        "author": "claude-skills-cn",
+        "stars": 980,
+        "url": "https://github.com/claude-skills-cn/Humanizer-zh",
+        "tag": "中文",
+        "relevance": "中文 AI 文本人性化 skill,写 PRD/复盘时把 AI 痕迹去掉,产品文档更接近实际表达"
+      },
+      {
+        "type": "skill",
+        "title": "trailofbits/skills",
+        "author": "trailofbits",
+        "stars": 760,
+        "url": "https://github.com/trailofbits/skills",
+        "tag": "安全",
+        "relevance": "安全审计向 skill 集,做 AI 合规章/数据脱敏时可参考其评审清单"
+      },
+      {
+        "type": "skill",
+        "title": "skill-creator",
+        "author": "anthropics",
+        "stars": 620,
+        "url": "https://github.com/anthropics/skills/tree/main/skill-creator",
+        "tag": "工具",
+        "relevance": "用来创建新 skill 的 skill,后续把 PM 高频指令模式化时直接产出"
+      },
+      {
+        "type": "mcp",
+        "title": "playwright-mcp",
+        "author": "microsoft",
+        "stars": 12400,
+        "url": "https://github.com/microsoft/playwright-mcp",
+        "tag": "热门",
+        "relevance": "微软官方浏览器自动化 MCP,做竞品 AI 产品体验拆解时批量截图/抓数据"
+      },
+      {
+        "type": "mcp",
+        "title": "github-mcp-server",
+        "author": "github",
+        "stars": 8900,
+        "url": "https://github.com/github/github-mcp-server",
+        "tag": "官方",
+        "relevance": "GitHub 官方 MCP,issues/PR 自动化,反思灵感记录直接走对话流"
+      },
+      {
+        "type": "mcp",
+        "title": "Figma-Context-MCP",
+        "author": "GLips",
+        "stars": 7100,
+        "url": "https://github.com/GLips/Figma-Context-MCP",
+        "tag": "设计",
+        "relevance": "Figma 设计稿读取 MCP,做 AI 产品原型时让 AI 直接看设计稿,减少描述成本"
+      },
+      {
+        "type": "mcp",
+        "title": "mcp-toolbox",
+        "author": "googleapis",
+        "stars": 3200,
+        "url": "https://github.com/googleapis/genai-toolbox",
+        "tag": "数据库",
+        "relevance": "Google 数据库 MCP,SQL 查数 + AI 分析合一,数据可用性盘点场景"
+      },
+      {
+        "type": "mcp",
+        "title": "kreuzberg",
+        "author": "Goldziher",
+        "stars": 1850,
+        "url": "https://github.com/Goldziher/kreuzberg",
+        "tag": "文档",
+        "relevance": "PDF/Word 解析 MCP,把同行 PRD/监管文件结构化喂给 AI 做对标分析"
       }
     ]
   },

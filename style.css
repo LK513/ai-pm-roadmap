@@ -617,6 +617,76 @@ ul { list-style: none; }
 
 .fm-link:hover { text-decoration: underline; }
 
+/* ── Hot Tools ── */
+.hot-tools-list { padding: var(--sp-2) 0; }
+
+.hot-tool {
+  display: block;
+  padding: var(--sp-3) var(--sp-5);
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.hot-tool:hover { background: var(--bg-hover); }
+.hot-tool + .hot-tool { border-top: 1px solid var(--border); }
+
+.hot-tool__row {
+  display: flex; align-items: center;
+  gap: var(--sp-2);
+}
+
+.hot-tool__type {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: var(--r-sm);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.hot-tool__type--skill {
+  background: var(--purple-glow);
+  color: var(--neon-purple);
+}
+
+.hot-tool__type--mcp {
+  background: var(--blue-glow);
+  color: var(--neon-blue);
+}
+
+.hot-tool__title {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-1); line-height: 1.5;
+  flex: 1;
+}
+
+.hot-tool__stars {
+  font-family: var(--font-mono);
+  font-size: 11px; font-weight: 600;
+  color: var(--neon-amber);
+  flex-shrink: 0;
+}
+
+.hot-tool__meta {
+  display: flex; align-items: center; gap: var(--sp-2);
+  margin-top: var(--sp-1);
+  font-size: 11px; color: var(--text-3);
+}
+
+.hot-tool__author { font-family: var(--font-mono); }
+
+.hot-tool__tag {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 600;
+  padding: 1px 7px; border-radius: var(--r-sm);
+  background: rgba(0,255,136,0.1);
+  color: var(--neon-green);
+}
+
+.hot-tool__rel {
+  font-size: 12px; color: var(--text-2);
+  margin-top: var(--sp-1); line-height: 1.5;
+}
+
 /* ── Reflections ── */
 .reflections { padding: var(--sp-2) 0; }
 
@@ -820,7 +890,7 @@ ul { list-style: none; }
   .stats-bar__countdown { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: var(--sp-3); }
   .grid-2 { grid-template-columns: 1fr; }
   .panel__head { padding: var(--sp-3) var(--sp-4); }
-  .task, .done-item, .frontier-item, .reflection { padding-left: var(--sp-4); padding-right: var(--sp-4); }
+  .task, .done-item, .frontier-item, .hot-tool, .reflection { padding-left: var(--sp-4); padding-right: var(--sp-4); }
   .task-add { padding-left: var(--sp-4); padding-right: var(--sp-4); }
 }
 
@@ -913,6 +983,7 @@ body::after {
 .panel--tasks { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 400ms both; }
 .panel--done { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 500ms both; }
 .panel--frontier { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 600ms both; }
+.panel--hot-tools { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 650ms both; }
 .panel--reflection { animation: panel-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) 700ms both; }
 @keyframes panel-rise {
   from { opacity: 0; transform: translateY(30px) scale(0.98); }
@@ -957,6 +1028,18 @@ body::after {
 }
 .frontier-item__arrow {
   transition: transform 200ms, color 200ms;
+}
+
+/* ── 10b. Hot tool hover ── */
+.hot-tool {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              background 200ms,
+              border-color 200ms;
+}
+.hot-tool:hover {
+  transform: translateX(4px);
+  background: var(--bg-hover);
+  border-color: rgba(168, 85, 247, 0.12);
 }
 
 /* ── 11. Task hover ── */
@@ -1126,6 +1209,6 @@ body::before {
     transition-duration: 0.01ms !important;
   }
   .panel, .hero__title, .hero__sub, .stats-bar, .side-widget,
-  .panel--tasks, .panel--done, .panel--frontier, .panel--reflection,
+  .panel--tasks, .panel--done, .panel--frontier, .panel--hot-tools, .panel--reflection,
   .reveal { opacity: 1; transform: none; }
 }
