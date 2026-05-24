@@ -1,6 +1,6 @@
 # AI-PM 转型路线图
 
-> 1 年从消金后台 PM 转型 AI PM,Q4 推 1 个 AI 功能上线。
+> 1 年从消金后台 PM 转型 AI PM。
 
 📊 **看板**:https://lk513.github.io/ai-pm-roadmap/
 
@@ -32,8 +32,9 @@
 |---|---|
 | "扫一下 issues" | 跑 `gh issue list` 读 open issues,整理进 `data.json`,关闭 issues |
 | "更新前沿动态" | WebSearch 抓 3 条最新 AI 资讯,写 `frontier.items` |
-| "标记本周任务 #2 完成" | 改 `data.json` 对应字段 |
-| "Q2 进度调到 50%" | 改 `progress.phases[1].progress` |
+| "标记任务 #2 完成" | 改 `data.json` 对应字段 |
+| "Stage 2 进度调到 50%" | 改 `progress.phases[1].progress` |
+| "按当前阶段给我布置 4 个任务" | 读 progress.currentStage,append 到 `tasks.items` |
 | "加一条反思: ..." | append 到 `reflections` |
 
 每次改完,Claude 自动 `git commit + push`。GitHub Pages 会在 1-2 分钟内重新部署。
@@ -43,8 +44,8 @@
 `data.json` 有 6 个顶层字段:
 - `meta` — 用户名、日期范围、3 个月检查点
 - `northStar` — 北极星目标
-- `progress` — 4 季度路线 + 进度
-- `thisWeek` — 本周任务
+- `progress` — 4 阶段路线 + 进度
+- `tasks` — 阶段任务清单(`items[]` 含 `stage` 字段;完成后写 `completedAt`)
 - `frontier` — AI 前沿动态(每日更新)
 - `reflections` — 近期反思(取最近 3 条展示)
 

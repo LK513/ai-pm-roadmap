@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260524-4">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -28,6 +28,34 @@
     <span class="meteor"></span>
   </div>
   <div class="bg-noise" aria-hidden="true"></div>
+
+  <!-- Anchor nav (left, weak menu) -->
+  <aside class="nav-anchor" id="nav-anchor" aria-label="页内导航">
+    <a class="nav-anchor__item" data-target="hero-stage" href="#hero-stage">
+      <span class="nav-anchor__dot"></span>
+      <span class="nav-anchor__label">阶段</span>
+    </a>
+    <a class="nav-anchor__item" data-target="panel-tasks" href="#panel-tasks">
+      <span class="nav-anchor__dot"></span>
+      <span class="nav-anchor__label">任务</span>
+    </a>
+    <a class="nav-anchor__item" data-target="panel-growth" href="#panel-growth">
+      <span class="nav-anchor__dot"></span>
+      <span class="nav-anchor__label">成长</span>
+    </a>
+    <a class="nav-anchor__item" data-target="panel-frontier" href="#panel-frontier">
+      <span class="nav-anchor__dot"></span>
+      <span class="nav-anchor__label">前沿</span>
+    </a>
+    <a class="nav-anchor__item" data-target="panel-tools" href="#panel-tools">
+      <span class="nav-anchor__dot"></span>
+      <span class="nav-anchor__label">工具</span>
+    </a>
+    <a class="nav-anchor__item" data-target="panel-reflection" href="#panel-reflection">
+      <span class="nav-anchor__dot"></span>
+      <span class="nav-anchor__label">反思</span>
+    </a>
+  </aside>
 
   <!-- Side widget -->
   <aside class="side-widget" id="side-widget">
@@ -67,7 +95,6 @@
         <div class="hero-banner__left">
           <div class="hero-eyebrow">NORTH STAR · 北极星</div>
           <h1 class="hero-title" id="north-star-quote">…</h1>
-          <p class="hero-sub" id="north-star-milestone">…</p>
         </div>
 
         <div class="hero-banner__right">
@@ -90,6 +117,15 @@
             </svg>
           </div>
         </div>
+      </div>
+
+      <!-- Stage timeline (moved up: right under north-star) -->
+      <div class="stage-rail" id="hero-stage">
+        <div class="stage-rail__title">
+          <span>阶段进程</span>
+          <span class="stage-rail__pct" id="stage-pct">— %</span>
+        </div>
+        <div class="stage-rail__track" id="timeline"></div>
       </div>
 
       <!-- Metric strip -->
@@ -150,37 +186,39 @@
         </div>
       </div>
 
-      <!-- Stage timeline -->
-      <div class="stage-rail">
-        <div class="stage-rail__title">
-          <span>阶段进程</span>
-          <span class="stage-rail__pct" id="stage-pct">— %</span>
-        </div>
-        <div class="stage-rail__track" id="timeline"></div>
-      </div>
     </header>
 
     <!-- BENTO MAIN -->
     <main class="bento">
 
-      <!-- 本周任务 — 强焦点（橙） -->
-      <section class="panel panel--tasks panel--accent-orange bento__tasks">
+      <!-- 阶段任务 — 强焦点（橙），TAB 切换进行中/已完成 -->
+      <section class="panel panel--tasks panel--accent-orange bento__tasks" id="panel-tasks">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            本周任务
+            阶段任务
           </h2>
           <div class="panel__tools">
-            <span class="panel__badge" id="week-of"></span>
-            <button class="btn-sm" id="btn-fetch-tasks">获取任务</button>
+            <span class="panel__badge" id="stage-of"></span>
+            <button class="btn-sm" id="btn-fetch-tasks">布置任务</button>
           </div>
         </div>
+        <div class="task-tabs" id="task-tabs">
+          <button class="task-tab is-active" data-tab="active" type="button">
+            <span>进行中</span><span class="task-tab__count" id="task-tab-active-count">0</span>
+          </button>
+          <button class="task-tab" data-tab="done" type="button">
+            <span>已完成</span><span class="task-tab__count" id="task-tab-done-count">0</span>
+          </button>
+          <button class="btn-sm btn-sm--ghost task-tabs__eval" id="btn-eval" type="button" hidden>月度评价</button>
+        </div>
         <ul class="task-list" id="tasks-list"></ul>
+        <div class="done-list" id="completed-list" hidden></div>
         <div class="task-add" id="task-add-area"></div>
       </section>
 
       <!-- AI 成长 — 紫 -->
-      <section class="panel panel--growth panel--accent-purple bento__growth">
+      <section class="panel panel--growth panel--accent-purple bento__growth" id="panel-growth">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -195,7 +233,7 @@
       </section>
 
       <!-- 前沿 — 蓝 -->
-      <section class="panel panel--frontier panel--accent-blue bento__frontier">
+      <section class="panel panel--frontier panel--accent-blue bento__frontier" id="panel-frontier">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
@@ -211,7 +249,7 @@
       </section>
 
       <!-- 热门工具 — 绿 -->
-      <section class="panel panel--hot-tools panel--accent-green bento__tools">
+      <section class="panel panel--hot-tools panel--accent-green bento__tools" id="panel-tools">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
@@ -225,21 +263,8 @@
         <div class="hot-tools-list" id="hot-tools-list"></div>
       </section>
 
-      <!-- 已完成 — 灰 -->
-      <section class="panel panel--done panel--accent-muted bento__done hidden" id="completed-section">
-        <div class="panel__head">
-          <h2 class="panel__title panel__title--muted">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            已完成
-            <span class="panel__count" id="completed-count"></span>
-          </h2>
-          <button class="btn-sm btn-sm--ghost" id="btn-eval">月度评价</button>
-        </div>
-        <div class="done-list" id="completed-list"></div>
-      </section>
-
       <!-- 反思 — 金 -->
-      <section class="panel panel--reflection panel--accent-amber bento__reflection">
+      <section class="panel panel--reflection panel--accent-amber bento__reflection" id="panel-reflection">
         <div class="panel__head">
           <h2 class="panel__title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -282,6 +307,6 @@
     </div>
 
   </div>
-  <script src="app.js?v=20260524-4"></script>
+  <script src="app.js"></script>
 </body>
 </html>

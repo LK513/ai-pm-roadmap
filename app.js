@@ -78,7 +78,6 @@ function nowStr() { return new Date().toISOString().slice(0,16).replace('T',' ')
 /* ── Hero ── */
 function renderHero(d) {
   document.getElementById('north-star-quote').textContent = d.northStar.title;
-  document.getElementById('north-star-milestone').textContent = d.northStar.milestone;
 }
 
 /* ── Timeline (in stats bar) ── */
@@ -177,10 +176,14 @@ function openFeedbackModal(type) {
   });
 }
 
-/* ── Tasks ── */
-function loadTasks(defs, weekOf) {
-  if (localStorage.getItem(WEEK_KEY) !== weekOf) {
-    localStorage.setItem(WEEK_KEY, weekOf);
+/* ── Tasks (stage-based) ── */
+let _activeTab = 'active';
+let _currentStage = '';
+
+function loadTasks(items, lastAssigned) {
+  // 当 lastAssigned 变化时，归档旧任务的已完成项，重置 localStorage
+  if (localStorage.getItem(WEEK_KEY) !== lastAssigned) {
+    localStorage.setItem(WEEK_KEY, lastAssigned);
     const old = _parse();
     const done = old.filter(t => t.completedAt);
     if (done.length) {
@@ -191,35 +194,86 @@ function loadTasks(defs, weekOf) {
     localStorage.removeItem(TASKS_KEY);
   }
   const saved = _parse();
-  return saved.length ? saved : defs.map(t => ({ id: t.id, text: t.task, done: t.done, status: null, completedAt: null, notes: '' }));
+  if (saved.length) return saved;
+  return (items || []).map(t => ({
+    id: t.id,
+    stage: t.stage || _currentStage,
+    text: t.task,
+    done: !!t.done,
+    status: t.status || null,
+    completedAt: t.completedAt || null,
+    notes: t.notes || ''
+  }));
 }
 
 function _parse() { try { const s = JSON.parse(localStorage.getItem(TASKS_KEY)); return Array.isArray(s) ? s : []; } catch { return []; } }
 function save(t) { localStorage.setItem(TASKS_KEY, JSON.stringify(t)); }
 
-function renderTasks(defs, weekOf) {
-  document.getElementById('week-of').textContent = weekOf;
-  const tasks = loadTasks(defs, weekOf);
-  const active = tasks.filter(t => !t.done);
-  const done = tasks.filter(t => t.done).sort((a,b) => (b.completedAt||'').localeCompare(a.completedAt||''));
-  drawActive(active, tasks, defs, weekOf);
-  drawDone(done);
-  drawAdd(tasks, defs, weekOf);
+function renderTasks(tasksData, currentStage) {
+  _currentStage = currentStage;
+  const stageOf = document.getElementById('stage-of');
+  if (stageOf) stageOf.textContent = currentStage;
 
-  // Hero metric strip 同步
-  const total = tasks.length || 0;
-  const rate = total ? Math.round((done.length / total) * 100) : 0;
+  const tasks = loadTasks(tasksData.items, tasksData.lastAssigned);
+  // 进行中：当前阶段未完成；已完成：所有阶段已完成 + 历史归档
+  const active = tasks.filter(t => !t.done && (t.stage === currentStage || !t.stage));
+  const arch = JSON.parse(localStorage.getItem('ai-pm-archive') || '[]');
+  const doneAll = [...tasks.filter(t => t.done), ...arch]
+    .sort((a,b) => (b.completedAt||'').localeCompare(a.completedAt||''));
+
+  drawActive(active, tasks, tasksData);
+  drawDone(doneAll);
+  drawAdd(tasks, tasksData);
+
+  // TAB 切换：更新计数与可见性
   const setText = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setText('task-tab-active-count', active.length);
+  setText('task-tab-done-count', doneAll.length);
+  applyTab();
+
+  // Hero metric strip
+  const total = active.length + doneAll.length;
+  const rate = total ? Math.round((doneAll.length / total) * 100) : 0;
   setText('m-tasks-active', active.length);
-  setText('m-tasks-done', done.length);
+  setText('m-tasks-done', doneAll.length);
   setText('m-tasks-rate', total ? `完成率 ${rate}%` : '尚未开局');
   setText('m-tasks-hint', `${total} 项 · 在做`);
 }
 
-function drawActive(active, all, defs, weekOf) {
+function applyTab() {
+  const taskList = document.getElementById('tasks-list');
+  const doneList = document.getElementById('completed-list');
+  const addArea = document.getElementById('task-add-area');
+  const evalBtn = document.getElementById('btn-eval');
+  document.querySelectorAll('.task-tab').forEach(b => {
+    b.classList.toggle('is-active', b.dataset.tab === _activeTab);
+  });
+  if (_activeTab === 'active') {
+    if (taskList) taskList.hidden = false;
+    if (doneList) doneList.hidden = true;
+    if (addArea) addArea.style.display = '';
+    if (evalBtn) evalBtn.hidden = true;
+  } else {
+    if (taskList) taskList.hidden = true;
+    if (doneList) doneList.hidden = false;
+    if (addArea) addArea.style.display = 'none';
+    if (evalBtn) evalBtn.hidden = false;
+  }
+}
+
+function initTaskTabs() {
+  document.querySelectorAll('.task-tab').forEach(b => {
+    b.addEventListener('click', () => {
+      _activeTab = b.dataset.tab;
+      applyTab();
+    });
+  });
+}
+
+function drawActive(active, all, tasksData) {
   const list = document.getElementById('tasks-list');
   list.innerHTML = '';
-  if (!active.length) { list.innerHTML = '<li class="task-empty">本周任务全部完成</li>'; return; }
+  if (!active.length) { list.innerHTML = '<li class="task-empty">当前阶段任务全部完成,点右上「布置任务」来一批新的</li>'; return; }
   active.forEach(t => {
     const li = document.createElement('li');
     li.className = 'task';
@@ -227,7 +281,7 @@ function drawActive(active, all, defs, weekOf) {
     const ck = document.createElement('span');
     ck.className = 'task__check';
     ck.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
-    ck.onclick = () => openCompleteModal(t, all, defs, weekOf);
+    ck.onclick = () => openCompleteModal(t, all, tasksData);
 
     const txt = document.createElement('span');
     txt.className = 'task__text';
@@ -251,7 +305,7 @@ function drawActive(active, all, defs, weekOf) {
     const del = document.createElement('button');
     del.className = 'task__del';
     del.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-    del.onclick = () => { all.splice(all.indexOf(t), 1); save(all); renderTasks(defs, weekOf); };
+    del.onclick = () => { all.splice(all.indexOf(t), 1); save(all); renderTasks(tasksData, _currentStage); };
 
     li.append(ck, txt, del);
     list.appendChild(li);
@@ -259,23 +313,24 @@ function drawActive(active, all, defs, weekOf) {
 }
 
 function drawDone(done) {
-  const sec = document.getElementById('completed-section');
   const list = document.getElementById('completed-list');
-  const cnt = document.getElementById('completed-count');
-  if (!done.length) { sec.classList.add('hidden'); return; }
-  sec.classList.remove('hidden');
-  cnt.textContent = done.length;
+  if (!list) return;
   list.innerHTML = '';
+  if (!done.length) {
+    list.innerHTML = '<div class="task-empty">还没有完成的任务</div>';
+    return;
+  }
   done.forEach(t => {
     const sc = STATUS_OPTIONS.find(s => s.value === t.status);
     const item = document.createElement('div');
     item.className = 'done-item';
 
     const head = document.createElement('div');
-    head.style.cssText = 'display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;';
+    head.style.cssText = 'display:flex;align-items:center;gap:12px;width:100%;cursor:pointer;padding:var(--sp-3) var(--sp-5);';
     head.innerHTML = `
       <span class="done-item__check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
       <span class="done-item__text">${esc(t.text)}</span>
+      ${t.stage ? `<span class="done-item__status done-item__status--purple">${esc(t.stage)}</span>` : ''}
       <span class="done-item__status done-item__status--${sc?.color || 'green'}">${esc(t.status || '全部完成')}</span>
       <span class="done-item__date">${t.completedAt || ''}</span>
       <span class="done-item__chevron">▸</span>`;
@@ -296,7 +351,7 @@ function drawDone(done) {
   });
 }
 
-function openCompleteModal(t, all, defs, weekOf) {
+function openCompleteModal(t, all, tasksData) {
   let html = `<div class="modal__field"><label class="modal__label">完成情况</label><select class="modal__select" id="mc-status">${STATUS_OPTIONS.map(s => `<option value="${s.value}">${s.value}</option>`).join('')}</select></div>`;
   html += `<div class="modal__field"><label class="modal__label">备注（支持粘贴链接）</label><textarea class="modal__textarea" id="mc-notes" rows="3" placeholder="完成心得、关键发现..."></textarea></div>`;
   openModal('标记完成', html, '确认完成', () => {
@@ -305,12 +360,12 @@ function openCompleteModal(t, all, defs, weekOf) {
     t.notes = document.getElementById('mc-notes').value.trim();
     t.completedAt = nowStr();
     save(all);
-    renderTasks(defs, weekOf);
+    renderTasks(tasksData, _currentStage);
     closeModal();
   });
 }
 
-function drawAdd(tasks, defs, weekOf) {
+function drawAdd(tasks, tasksData) {
   const area = document.getElementById('task-add-area');
   area.innerHTML = '';
   const btn = document.createElement('button');
@@ -323,12 +378,12 @@ function drawAdd(tasks, defs, weekOf) {
     inp.placeholder = '输入任务，回车确认';
     inp.addEventListener('keydown', e => {
       if (e.key === 'Enter' && inp.value.trim()) {
-        tasks.push({ id: Date.now(), text: inp.value.trim(), done: false, status: null, completedAt: null, notes: '' });
-        save(tasks); renderTasks(defs, weekOf);
+        tasks.push({ id: Date.now(), stage: _currentStage, text: inp.value.trim(), done: false, status: null, completedAt: null, notes: '' });
+        save(tasks); renderTasks(tasksData, _currentStage);
       }
-      if (e.key === 'Escape') drawAdd(tasks, defs, weekOf);
+      if (e.key === 'Escape') drawAdd(tasks, tasksData);
     });
-    inp.addEventListener('blur', () => setTimeout(() => drawAdd(tasks, defs, weekOf), 100));
+    inp.addEventListener('blur', () => setTimeout(() => drawAdd(tasks, tasksData), 100));
     area.appendChild(inp); inp.focus();
   };
   area.appendChild(btn);
@@ -405,11 +460,16 @@ function renderHotTools(hotTools) {
     div.className = 'hot-tool';
     const typeCls = item.type === 'mcp' ? 'hot-tool__type--mcp' : 'hot-tool__type--skill';
     const typeText = item.type === 'mcp' ? 'MCP' : 'SKILL';
+    const period = item.period || '本周';
+    const delta = item.starsRecent != null ? item.starsRecent : null;
+    const starsLabel = delta != null
+      ? `<span class="hot-tool__stars" title="近期涨星 / 总星 ${item.stars ?? '—'}">+${delta} ★ <em>${esc(period)}</em></span>`
+      : `<span class="hot-tool__stars">★ ${item.stars ?? '—'}</span>`;
     div.innerHTML = `
       <div class="hot-tool__row">
         <span class="hot-tool__type ${typeCls}">${typeText}</span>
         <span class="hot-tool__title">${esc(item.title)}</span>
-        <span class="hot-tool__stars">★ ${item.stars}</span>
+        ${starsLabel}
       </div>
       <div class="hot-tool__meta">
         <span class="hot-tool__author">${esc(item.author)}</span>
@@ -423,10 +483,14 @@ function renderHotTools(hotTools) {
 
 function openHotToolModal(item) {
   const link = item.url ? `<a class="fm-link" href="${esc(item.url)}" target="_blank" rel="noopener">查看仓库 →</a>` : '';
+  const period = item.period || '本周';
+  const starText = item.starsRecent != null
+    ? `${esc(period)}涨 +${item.starsRecent} ★ · 总 ${item.stars ?? '—'}`
+    : `★ ${item.stars ?? '—'}`;
   const html = `
     <div class="fm-meta">
       <span class="frontier-item__tag">${item.type === 'mcp' ? 'MCP' : 'SKILL'}</span>
-      <span>${esc(item.author)} · ★ ${item.stars}</span>
+      <span>${esc(item.author)} · ${starText}</span>
     </div>
     <div class="fm-relevance">${esc(item.relevance)}</div>
     ${link}`;
@@ -456,7 +520,7 @@ function initFetch(data) {
   const btnTasks = document.getElementById('btn-fetch-tasks');
   if (btnTasks) btnTasks.onclick = () => {
     const today = new Date().toISOString().split('T')[0];
-    navigator.clipboard?.writeText(`我是AI-PM转型中的产品经理，当前处于 ${stage} ${theme}（${pct}%）。\n\n请布置本周（${today} 起）4-5个具体可执行任务，围绕当前阶段目标。\n\n写入 D:\\AI-PM\\data.json 的 thisWeek.tasks（{id, task, done}）和 thisWeek.weekOf（${today}），然后 git commit + push。`)
+    navigator.clipboard?.writeText(`我是AI-PM转型中的产品经理，当前处于 ${stage} ${theme}（${pct}%）。\n\n请先看 D:\\AI-PM\\data.json 里我当前阶段已经完成了哪些任务、还在做哪些，再围绕 ${stage} 阶段目标布置 4-5 个具体可执行任务。\n\n写入 data.tasks.items（每条含 {id, stage:"${stage}", task, done:false}），并把 data.tasks.lastAssigned 更新为 ${today}，然后 git commit + push。`)
       .then(() => toast('已复制'), () => toast('复制失败'));
   };
 
@@ -468,7 +532,7 @@ function initFetch(data) {
 
   const btnTools = document.getElementById('btn-fetch-tools');
   if (btnTools) btnTools.onclick = () => {
-    navigator.clipboard?.writeText('请用 `gh search repos --sort stars --limit 15 --json name,owner,description,stargazersCount,url,updatedAt "claude skill"` 和 "mcp server" 各拉一批，从消金 PM 视角筛 5 个 skill + 5 个 mcp 共 10 条，写入 D:\\AI-PM\\data.json 的 hotTools.items（字段: type/title/author/stars/url/tag/relevance），更新 lastToolsUpdate=今日，然后 git commit + push。')
+    navigator.clipboard?.writeText('请抓 GitHub Trending 近一周涨星最快的仓库（不是总星数）：访问 https://github.com/trending?since=weekly 分别看 all / python / typescript，再叠加搜索关键词 "claude skill"、"mcp server"、"ai agent"。从消金 PM 视角筛 5 个 skill + 5 个 mcp 共 10 条，写入 D:\\AI-PM\\data.json 的 hotTools.items，每条字段：{type, title, author, stars(总), starsRecent(本周涨星数), period:"本周", url, tag, relevance}。更新 lastToolsUpdate=今日，然后 git commit + push。注意：核心排序按 starsRecent 倒序，避免每次都是同样的几个老仓库。')
       .then(() => toast('已复制'), () => toast('复制失败'));
   };
 }
@@ -642,6 +706,41 @@ function renderFooter(d) {
   document.getElementById('issues-link').href = ISSUES_URL;
 }
 
+/* ── Nav anchor (left rail scroll-spy) ── */
+function initNavAnchor() {
+  const items = document.querySelectorAll('.nav-anchor__item');
+  if (!items.length) return;
+
+  // 平滑滚动
+  items.forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const id = a.dataset.target;
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  const map = new Map();
+  items.forEach(a => map.set(a.dataset.target, a));
+
+  const setActive = id => {
+    items.forEach(a => a.classList.toggle('is-active', a.dataset.target === id));
+  };
+
+  // 选取交叉比例最高的目标作为当前
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  if (!targets.length) return;
+  const visible = new Map();
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => visible.set(en.target.id, en.intersectionRatio));
+    let topId = null, topRatio = 0;
+    visible.forEach((ratio, id) => { if (ratio > topRatio) { topRatio = ratio; topId = id; } });
+    if (topId) setActive(topId);
+  }, { rootMargin: '-20% 0px -50% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+  targets.forEach(t => io.observe(t));
+}
+
 /* ── Utils ── */
 function toast(msg) {
   const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
@@ -663,12 +762,14 @@ function esc(s) {
     initModal();
     initFetch(data);
     initEval();
-    renderTasks(data.thisWeek.tasks, data.thisWeek.weekOf);
+    initTaskTabs();
+    renderTasks(data.tasks, data.progress.currentStage);
     renderFrontier(data.frontier);
     renderHotTools(data.hotTools);
     renderGrowth(data.growth);
     renderReflections(data.reflections);
     renderFooter(data);
+    initNavAnchor();
   } catch (e) {
     document.getElementById('error-banner').classList.remove('hidden');
     document.getElementById('error-message').textContent = '渲染失败: ' + e.message;

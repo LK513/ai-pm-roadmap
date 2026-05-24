@@ -10,7 +10,6 @@
   },
   "northStar": {
     "title": "重生之我要当AI-PM",
-    "milestone": "Q4 推 1 个 AI 功能上线",
     "quote": "Slow is smooth, smooth is fast"
   },
   "progress": {
@@ -56,18 +55,17 @@
       }
     ]
   },
-  "thisWeek": {
-    "weekOf": "2026-05-18",
-    "tasks": [
-      {"id": 1, "task": "完成《Building AI Products》第 3 章", "done": true},
-      {"id": 2, "task": "梳理消金场景中 3 个 AI 可能切入点", "done": false},
-      {"id": 3, "task": "和数据团队对一次,问数据可用性", "done": false},
-      {"id": 4, "task": "拆解 1 个同行 AI 智能客服 PRD", "done": false},
-      {"id": 5, "task": "写催收方言识别场景可行性分析(2 页内)", "done": false},
-      {"id": 6, "task": "盘点催收外呼数据可用性(标注样本量+合规口径)", "done": false},
-      {"id": 7, "task": "拆解信也科技 AI 智能客服 PRD(数据/合规/质量三章)", "done": false},
-      {"id": 8, "task": "围绕 Stripe Radar 2.0 写 1 篇观察笔记", "done": false},
-      {"id": 9, "task": "Q2 候选场景收敛会(从 3 选 1,定 Q3 PRD 主题)", "done": false}
+  "tasks": {
+    "lastAssigned": "2026-05-24",
+    "items": [
+      {"id": 1, "stage": "Stage 1", "task": "完成《Building AI Products》第 3 章", "done": true, "status": "全部完成", "completedAt": "2026-05-22 15:30", "notes": "重点章节：场景识别 + 数据准备"},
+      {"id": 2, "stage": "Stage 1", "task": "梳理消金场景中 3 个 AI 可能切入点", "done": false},
+      {"id": 3, "stage": "Stage 1", "task": "和数据团队对一次,问数据可用性", "done": false},
+      {"id": 4, "stage": "Stage 1", "task": "拆解 1 个同行 AI 智能客服 PRD", "done": false},
+      {"id": 5, "stage": "Stage 1", "task": "写催收方言识别场景可行性分析(2 页内)", "done": false},
+      {"id": 6, "stage": "Stage 1", "task": "盘点催收外呼数据可用性(标注样本量+合规口径)", "done": false},
+      {"id": 7, "stage": "Stage 1", "task": "拆解信也科技 AI 智能客服 PRD(数据/合规/质量三章)", "done": false},
+      {"id": 8, "stage": "Stage 1", "task": "围绕 Stripe Radar 2.0 写 1 篇观察笔记", "done": false}
     ]
   },
   "frontier": {
@@ -157,57 +155,92 @@
   },
   "hotTools": {
     "lastToolsUpdate": "2026-05-24",
+    "period": "本周",
     "items": [
-      {
-        "type": "skill",
-        "title": "anthropics/skills",
-        "author": "anthropics",
-        "stars": 4200,
-        "url": "https://github.com/anthropics/skills",
-        "tag": "官方",
-        "relevance": "Anthropic 官方 skill 合集,document-skills 系列直接可用,做 AI PRD 模板时可拆其结构"
-      },
       {
         "type": "skill",
         "title": "obra/superpowers",
         "author": "obra",
         "stars": 1830,
+        "starsRecent": 412,
+        "period": "本周",
         "url": "https://github.com/obra/superpowers",
-        "tag": "热门",
+        "tag": "本周飙升",
         "relevance": "高质量 Claude Code skill 集合,brainstorming/debugging/test-driven-development 可借鉴 PM 工作流"
+      },
+      {
+        "type": "mcp",
+        "title": "kreuzberg",
+        "author": "Goldziher",
+        "stars": 1850,
+        "starsRecent": 386,
+        "period": "本周",
+        "url": "https://github.com/Goldziher/kreuzberg",
+        "tag": "本周飙升",
+        "relevance": "PDF/Word 解析 MCP,把同行 PRD/监管文件结构化喂给 AI 做对标分析"
       },
       {
         "type": "skill",
         "title": "Humanizer-zh",
         "author": "claude-skills-cn",
         "stars": 980,
+        "starsRecent": 274,
+        "period": "本周",
         "url": "https://github.com/claude-skills-cn/Humanizer-zh",
-        "tag": "中文",
+        "tag": "中文新热",
         "relevance": "中文 AI 文本人性化 skill,写 PRD/复盘时把 AI 痕迹去掉,产品文档更接近实际表达"
+      },
+      {
+        "type": "mcp",
+        "title": "Figma-Context-MCP",
+        "author": "GLips",
+        "stars": 7100,
+        "starsRecent": 218,
+        "period": "本周",
+        "url": "https://github.com/GLips/Figma-Context-MCP",
+        "tag": "设计",
+        "relevance": "Figma 设计稿读取 MCP,做 AI 产品原型时让 AI 直接看设计稿,减少描述成本"
+      },
+      {
+        "type": "skill",
+        "title": "anthropics/skills",
+        "author": "anthropics",
+        "stars": 4200,
+        "starsRecent": 195,
+        "period": "本周",
+        "url": "https://github.com/anthropics/skills",
+        "tag": "官方稳健",
+        "relevance": "Anthropic 官方 skill 合集,document-skills 系列直接可用,做 AI PRD 模板时可拆其结构"
+      },
+      {
+        "type": "mcp",
+        "title": "mcp-toolbox",
+        "author": "googleapis",
+        "stars": 3200,
+        "starsRecent": 167,
+        "period": "本周",
+        "url": "https://github.com/googleapis/genai-toolbox",
+        "tag": "数据库",
+        "relevance": "Google 数据库 MCP,SQL 查数 + AI 分析合一,数据可用性盘点场景"
       },
       {
         "type": "skill",
         "title": "trailofbits/skills",
         "author": "trailofbits",
         "stars": 760,
+        "starsRecent": 142,
+        "period": "本周",
         "url": "https://github.com/trailofbits/skills",
         "tag": "安全",
         "relevance": "安全审计向 skill 集,做 AI 合规章/数据脱敏时可参考其评审清单"
-      },
-      {
-        "type": "skill",
-        "title": "skill-creator",
-        "author": "anthropics",
-        "stars": 620,
-        "url": "https://github.com/anthropics/skills/tree/main/skill-creator",
-        "tag": "工具",
-        "relevance": "用来创建新 skill 的 skill,后续把 PM 高频指令模式化时直接产出"
       },
       {
         "type": "mcp",
         "title": "playwright-mcp",
         "author": "microsoft",
         "stars": 12400,
+        "starsRecent": 128,
+        "period": "本周",
         "url": "https://github.com/microsoft/playwright-mcp",
         "tag": "热门",
         "relevance": "微软官方浏览器自动化 MCP,做竞品 AI 产品体验拆解时批量截图/抓数据"
@@ -217,36 +250,22 @@
         "title": "github-mcp-server",
         "author": "github",
         "stars": 8900,
+        "starsRecent": 96,
+        "period": "本周",
         "url": "https://github.com/github/github-mcp-server",
         "tag": "官方",
         "relevance": "GitHub 官方 MCP,issues/PR 自动化,反思灵感记录直接走对话流"
       },
       {
-        "type": "mcp",
-        "title": "Figma-Context-MCP",
-        "author": "GLips",
-        "stars": 7100,
-        "url": "https://github.com/GLips/Figma-Context-MCP",
-        "tag": "设计",
-        "relevance": "Figma 设计稿读取 MCP,做 AI 产品原型时让 AI 直接看设计稿,减少描述成本"
-      },
-      {
-        "type": "mcp",
-        "title": "mcp-toolbox",
-        "author": "googleapis",
-        "stars": 3200,
-        "url": "https://github.com/googleapis/genai-toolbox",
-        "tag": "数据库",
-        "relevance": "Google 数据库 MCP,SQL 查数 + AI 分析合一,数据可用性盘点场景"
-      },
-      {
-        "type": "mcp",
-        "title": "kreuzberg",
-        "author": "Goldziher",
-        "stars": 1850,
-        "url": "https://github.com/Goldziher/kreuzberg",
-        "tag": "文档",
-        "relevance": "PDF/Word 解析 MCP,把同行 PRD/监管文件结构化喂给 AI 做对标分析"
+        "type": "skill",
+        "title": "skill-creator",
+        "author": "anthropics",
+        "stars": 620,
+        "starsRecent": 78,
+        "period": "本周",
+        "url": "https://github.com/anthropics/skills/tree/main/skill-creator",
+        "tag": "工具",
+        "relevance": "用来创建新 skill 的 skill,后续把 PM 高频指令模式化时直接产出"
       }
     ]
   },
