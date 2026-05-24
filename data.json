@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0",
-    "lastUpdate": "2026-05-23",
+    "lastUpdate": "2026-05-24",
     "userName": "李凯",
     "githubUser": "LK513",
     "yearStart": "2026-01-01",
@@ -262,8 +262,79 @@
       "content": "AI PM 不是搞算法,是搞'判断力'。判断什么场景值得用 AI、什么场景用规则更划算。"
     }
   ],
+  "growth": {
+    "lastUpdate": "2026-05-24",
+    "items": [
+      {
+        "id": "2026-05-24-stage1-first",
+        "date": "2026-05-24",
+        "stage": "Stage 1",
+        "sessionTitle": "四维能力首次系统测试",
+        "headline": "识别真实瓶颈：不是技术理解，是业务判断准确度",
+        "duration": "约 2 小时",
+        "overallScore": 63,
+        "dimensions": [
+          {"name": "LLM 边界判断", "score": 70, "level": "B", "comment": "理解 LLM 擅长理解+生成，不擅长精确决策；金融场景必须可解释"},
+          {"name": "项目可行性", "score": 65, "level": "B-", "comment": "可行性 ≠ 技术可行，要算账（ROI）+ 看监管 + 定降级方案"},
+          {"name": "Prompt 工程", "score": 50, "level": "C（瓶颈）", "comment": "瓶颈不是写 prompt，是业务判断准确度。把'软抗'误判为'需要周转'"},
+          {"name": "效果评估", "score": 68, "level": "B", "comment": "三步走思路完整：离线评估 → 影子模式 → 持续监控+badcase 闭环"}
+        ],
+        "questions": [
+          {
+            "q": "Q1 LLM 边界判断",
+            "scenario": "3 个消金场景判断哪些适合用 LLM",
+            "myAnswer": "客户 FAQ 适合；催收外呼方言识别需混合架构；风控决策不适合纯 LLM",
+            "correctAnswer": "FAQ ✓适合；方言识别用 ASR+LLM 混合；风控决策用规则引擎（要可解释）",
+            "score": 70,
+            "takeaway": "金融场景的可解释性是硬约束，决策类场景必须用规则引擎"
+          },
+          {
+            "q": "Q2 项目可行性",
+            "scenario": "AI 智能客服替代 80% 人工坐席，是否可行？",
+            "myAnswer": "看数据量、看监管、算 ROI",
+            "correctAnswer": "数据充足度（5万+对话样本）+ 合规边界（监管要求可解释）+ ROI 测算 + 风险兜底（情绪激动转人工、合规话术库）",
+            "score": 65,
+            "takeaway": "可行性评估必须算账 + 看监管 + 定降级方案，缺一不可"
+          },
+          {
+            "q": "Q3 Prompt 工程（最弱项）",
+            "scenario": "5 段催收对话，判断意愿+情绪+跟进策略",
+            "myAnswer": "把'软抗'判断为'需要周转'，跟进策略给到'走司法程序'",
+            "correctAnswer": "真·需要周转 = 三条件齐全（明确原因+明确时间+明确金额）；软抗 = 拒绝沟通；合规升级路径：软催 → 律师函 → 司法",
+            "score": 50,
+            "takeaway": "Prompt 工程的真正瓶颈是业务判断准确度，不是写 prompt 的技巧"
+          },
+          {
+            "q": "Q4 效果评估",
+            "scenario": "循环智能升级到大模型，怎么评估？",
+            "myAnswer": "1) 离线评估对比新旧准确率 2) 灰度陪跑判断合规率 3) 持续监控 MSI 波动率 + 落库 badcase",
+            "correctAnswer": "1) Offline Evaluation 离线评估 2) Shadow Mode 影子模式陪跑 3) Model Drift（模型漂移，不是 MSI）+ Data Flywheel 数据飞轮闭环",
+            "score": 68,
+            "takeaway": "术语要用行业标准：Model Drift（模型漂移），不是自创的 MSI 波动率"
+          }
+        ],
+        "conceptsLearned": [
+          {"term": "Offline Evaluation", "zh": "离线评估", "desc": "新模型上线前用历史数据测准确率"},
+          {"term": "Shadow Mode", "zh": "影子模式 / 陪跑", "desc": "新旧模型同时跑，新模型只看不接管"},
+          {"term": "Stratified Sampling", "zh": "分层抽样", "desc": "按场景比例抽样保证覆盖度"},
+          {"term": "Precision vs Recall", "zh": "精确率 vs 召回率", "desc": "查准 vs 查全的权衡"},
+          {"term": "Model Drift", "zh": "模型漂移", "desc": "业务变化导致模型准确率衰减"},
+          {"term": "Hallucination", "zh": "幻觉", "desc": "LLM 编造不存在的事实"},
+          {"term": "Data Flywheel", "zh": "数据飞轮", "desc": "badcase → 标注 → 训练 → 部署 → 新 badcase 闭环"},
+          {"term": "SME", "zh": "Subject Matter Expert / 业务专家", "desc": "AI-PM 工作流中的关键角色：补充业务示例"},
+          {"term": "HITL", "zh": "Human-in-the-Loop / 人在回路", "desc": "AI 决策中保留人工审核节点"},
+          {"term": "真·需要周转", "zh": "三条件齐全", "desc": "明确原因 + 明确时间 + 明确金额，缺一不可"},
+          {"term": "软抗", "zh": "拒绝沟通", "desc": "用'困难''再说''过几天'敷衍但不给具体方案"}
+        ],
+        "feedback": "Prompt 工程的真正瓶颈不是技巧，是业务判断准确度。需要 SME 补充业务示例后才能写出准确的 prompt。",
+        "userQuote": "我大概会先做一些基础示例，然后让一线催收的主管人员补充，然后交给AI复合，之后再进入真正的prompt里",
+        "nextStep": "1) 强化'软抗 vs 真周转'等催收业务判断 2) 系统学习离线评估指标设计 3) 把概念串成可复用的 AI PRD 三章模板（数据/合规/质量）"
+      }
+    ]
+  },
   "stats": {
     "issuesProcessed": 0,
-    "reflectionsCount": 2
+    "reflectionsCount": 2,
+    "growthSessions": 1
   }
 }

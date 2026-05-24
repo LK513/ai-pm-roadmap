@@ -443,6 +443,136 @@ function initFetch(data) {
   };
 }
 
+/* ── Growth (AI 成长) ── */
+function renderGrowth(growth) {
+  const el = document.getElementById('growth-list');
+  if (!el) return;
+  if (!growth || !growth.items?.length) {
+    el.innerHTML = '<div class="growth-empty">还没有训练记录</div>';
+    return;
+  }
+  const cnt = document.getElementById('growth-count');
+  if (cnt) cnt.textContent = growth.items.length;
+
+  const badge = document.getElementById('growth-badge');
+  if (badge && growth.lastUpdate) {
+    const ago = daysAgo(growth.lastUpdate);
+    if (ago <= 0) { badge.textContent = '今日'; badge.className = 'panel__badge panel__badge--green'; }
+    else if (ago === 1) { badge.textContent = '昨天'; badge.className = 'panel__badge'; }
+    else { badge.textContent = `${ago}天前`; badge.className = 'panel__badge'; }
+  }
+
+  el.innerHTML = '';
+  // 倒序：最新在上
+  [...growth.items].reverse().forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'growth-item';
+
+    const dimsHTML = (item.dimensions || []).map(d =>
+      `<div class="gw-dim">
+        <div class="gw-dim__row">
+          <span class="gw-dim__name">${esc(d.name)}</span>
+          <span class="gw-dim__score">${d.score}</span>
+        </div>
+        <div class="gw-dim__bar"><i style="width:${d.score}%"></i></div>
+      </div>`
+    ).join('');
+
+    div.innerHTML = `
+      <div class="gw-head">
+        <div class="gw-head__left">
+          <span class="gw-stage">${esc(item.stage)}</span>
+          <span class="gw-date">${esc(item.date)}</span>
+        </div>
+        <span class="gw-score">${item.overallScore || ''}</span>
+      </div>
+      <div class="gw-title">${esc(item.sessionTitle)}</div>
+      <div class="gw-headline">${esc(item.headline || '')}</div>
+      <div class="gw-dims">${dimsHTML}</div>
+      <button class="gw-detail-btn">查看详情 →</button>
+    `;
+    div.querySelector('.gw-detail-btn').onclick = () => openGrowthModal(item);
+    el.appendChild(div);
+  });
+}
+
+function openGrowthModal(item) {
+  const dimsHTML = (item.dimensions || []).map(d =>
+    `<div class="gm-dim">
+      <div class="gm-dim__head">
+        <span class="gm-dim__name">${esc(d.name)}</span>
+        <span class="gm-dim__level">${esc(d.level)}</span>
+        <span class="gm-dim__score">${d.score}</span>
+      </div>
+      <div class="gm-dim__comment">${esc(d.comment)}</div>
+    </div>`
+  ).join('');
+
+  const questionsHTML = (item.questions || []).map(q =>
+    `<div class="gm-q">
+      <div class="gm-q__head">
+        <span class="gm-q__title">${esc(q.q)}</span>
+        <span class="gm-q__score">${q.score}</span>
+      </div>
+      <div class="gm-q__scenario"><b>场景:</b> ${esc(q.scenario)}</div>
+      <div class="gm-q__my"><b>我的答案:</b> ${esc(q.myAnswer)}</div>
+      <div class="gm-q__correct"><b>正确思路:</b> ${esc(q.correctAnswer)}</div>
+      <div class="gm-q__takeaway">💡 ${esc(q.takeaway)}</div>
+    </div>`
+  ).join('');
+
+  const conceptsHTML = (item.conceptsLearned || []).map(c =>
+    `<div class="gm-concept">
+      <div class="gm-concept__row">
+        <span class="gm-concept__term">${esc(c.term)}</span>
+        <span class="gm-concept__zh">${esc(c.zh)}</span>
+      </div>
+      <div class="gm-concept__desc">${esc(c.desc)}</div>
+    </div>`
+  ).join('');
+
+  const quote = item.userQuote
+    ? `<div class="gm-quote">"${esc(item.userQuote)}"</div>`
+    : '';
+
+  const html = `
+    <div class="gm-meta">
+      <span class="frontier-item__tag">${esc(item.stage)}</span>
+      <span>${esc(item.date)}</span>
+      ${item.duration ? `<span>· ${esc(item.duration)}</span>` : ''}
+    </div>
+    <div class="gm-headline">${esc(item.headline || '')}</div>
+
+    <div class="gm-section">
+      <div class="gm-section__title">📊 能力雷达</div>
+      <div class="gm-dims">${dimsHTML}</div>
+    </div>
+
+    <div class="gm-section">
+      <div class="gm-section__title">📝 题目详情</div>
+      <div class="gm-questions">${questionsHTML}</div>
+    </div>
+
+    <div class="gm-section">
+      <div class="gm-section__title">📚 学到的概念（${(item.conceptsLearned || []).length}个）</div>
+      <div class="gm-concepts">${conceptsHTML}</div>
+    </div>
+
+    ${item.feedback ? `<div class="gm-section">
+      <div class="gm-section__title">🎯 关键反馈</div>
+      <div class="gm-feedback">${esc(item.feedback)}</div>
+    </div>` : ''}
+
+    ${quote}
+
+    ${item.nextStep ? `<div class="gm-section">
+      <div class="gm-section__title">🚀 下一步</div>
+      <div class="gm-nextstep">${esc(item.nextStep)}</div>
+    </div>` : ''}
+  `;
+  openModal(esc(item.sessionTitle), html, '关闭', closeModal);
+}
+
 /* ── Reflections ── */
 function renderReflections(refs) {
   const el = document.getElementById('reflections-list');
@@ -485,6 +615,7 @@ function esc(s) {
     renderTasks(data.thisWeek.tasks, data.thisWeek.weekOf);
     renderFrontier(data.frontier);
     renderHotTools(data.hotTools);
+    renderGrowth(data.growth);
     renderReflections(data.reflections);
     renderFooter(data);
   } catch (e) {
