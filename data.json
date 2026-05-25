@@ -23,7 +23,12 @@
         "progress": 40,
         "startDate": "2026-05-23",
         "endDate": "2026-07-31",
-        "deliverables": ["读完《Building AI Products》", "AI 行业图谱整理", "5 个 AI 工具实操", "看板搭建完成 ✓"],
+        "deliverables": [
+          "读完《Building AI Products》",
+          "AI 行业图谱整理",
+          "5 个 AI 工具实操",
+          "看板搭建完成 ✓"
+        ],
         "notes": "看板已搭建完成，但学习目标尚未达成。Book 进度约30%，行业图谱和工具实操未开始。"
       },
       {
@@ -33,7 +38,11 @@
         "progress": 0,
         "startDate": "2026-08-01",
         "endDate": "2026-10-31",
-        "deliverables": ["消金 3 大 AI 切入点分析", "数据可用性盘点", "竞品 AI 功能拆解"]
+        "deliverables": [
+          "消金 3 大 AI 切入点分析",
+          "数据可用性盘点",
+          "竞品 AI 功能拆解"
+        ]
       },
       {
         "stage": "Stage 3",
@@ -42,7 +51,11 @@
         "progress": 0,
         "startDate": "2026-11-01",
         "endDate": "2027-01-31",
-        "deliverables": ["1 份完整 AI PRD", "数据/合规/质量三章模板", "技术评审过会"]
+        "deliverables": [
+          "1 份完整 AI PRD",
+          "数据/合规/质量三章模板",
+          "技术评审过会"
+        ]
       },
       {
         "stage": "Stage 4",
@@ -51,26 +64,113 @@
         "progress": 0,
         "startDate": "2027-02-01",
         "endDate": "2027-04-30",
-        "deliverables": ["AI 功能 v1 上线", "数据效果回归", "项目复盘文档"]
+        "deliverables": [
+          "AI 功能 v1 上线",
+          "数据效果回归",
+          "项目复盘文档"
+        ]
       }
     ]
   },
   "tasks": {
     "lastAssigned": "2026-05-24",
     "items": [
-      {"id": 1, "stage": "Stage 1", "task": "完成《Building AI Products》第 3 章", "done": true, "status": "全部完成", "completedAt": "2026-05-22 15:30", "notes": "重点章节：场景识别 + 数据准备"},
-      {"id": 2, "stage": "Stage 1", "task": "梳理消金场景中 3 个 AI 可能切入点", "done": false},
-      {"id": 3, "stage": "Stage 1", "task": "和数据团队对一次,问数据可用性", "done": false},
-      {"id": 4, "stage": "Stage 1", "task": "拆解 1 个同行 AI 智能客服 PRD", "done": false},
-      {"id": 5, "stage": "Stage 1", "task": "写催收方言识别场景可行性分析(2 页内)", "done": false},
-      {"id": 6, "stage": "Stage 1", "task": "盘点催收外呼数据可用性(标注样本量+合规口径)", "done": false},
-      {"id": 7, "stage": "Stage 1", "task": "拆解信也科技 AI 智能客服 PRD(数据/合规/质量三章)", "done": false},
-      {"id": 8, "stage": "Stage 1", "task": "围绕 Stripe Radar 2.0 写 1 篇观察笔记", "done": false}
+      {
+        "id": 1,
+        "stage": "Stage 1",
+        "task": "完成《Building AI Products》第 3 章",
+        "done": true,
+        "status": "全部完成",
+        "completedAt": "2026-05-22 15:30",
+        "notes": "重点章节：场景识别 + 数据准备"
+      },
+      {
+        "id": 2,
+        "stage": "Stage 1",
+        "task": "梳理消金场景中 3 个 AI 可能切入点",
+        "done": false
+      },
+      {
+        "id": 3,
+        "stage": "Stage 1",
+        "task": "和数据团队对一次,问数据可用性",
+        "done": false
+      },
+      {
+        "id": 4,
+        "stage": "Stage 1",
+        "task": "拆解 1 个同行 AI 智能客服 PRD",
+        "done": false
+      },
+      {
+        "id": 5,
+        "stage": "Stage 1",
+        "task": "写催收方言识别场景可行性分析(2 页内)",
+        "done": false
+      },
+      {
+        "id": 6,
+        "stage": "Stage 1",
+        "task": "盘点催收外呼数据可用性(标注样本量+合规口径)",
+        "done": false
+      },
+      {
+        "id": 7,
+        "stage": "Stage 1",
+        "task": "拆解信也科技 AI 智能客服 PRD(数据/合规/质量三章)",
+        "done": false
+      },
+      {
+        "id": 8,
+        "stage": "Stage 1",
+        "task": "围绕 Stripe Radar 2.0 写 1 篇观察笔记",
+        "done": false
+      }
     ]
   },
   "frontier": {
-    "lastFrontierUpdate": "2026-05-22",
+    "lastFrontierUpdate": "2026-05-25",
     "items": [
+      {
+        "title": "OpenAI 发布 GPT-5.5: 84.9% 任务达专家水平，AI 首次自我优化基础设施",
+        "source": "腾讯科技 / OpenAI",
+        "date": "2026-04-24",
+        "relevance": "GPT-5.5 在财务建模、税务审阅等知识工作中表现接近人类专家，消金 PM 可参考其 Agent 化工作流设计",
+        "url": "https://news.qq.com/rain/a/20260424A028RQ00",
+        "content": "OpenAI 于 4 月 23 日发布 GPT-5.5，定位为面向真实工作的 Agent 型模型。核心数据：GDPval 测试中 84.9% 任务达到或超过行业专家水平（GPT-5.4 为 83.0%），Terminal-Bench 2.0 得分 82.7%（Claude Opus 4.7 为 69.4%），OSWorld-Verified 成功率 78.7% 超越人类基线。上下文窗口扩至 100 万 Token。定价：API 输入 5 美元/百万 Token、输出 30 美元/百万 Token，约为 GPT-5.4 的两倍，但官方称 Token 效率提升后综合成本未必上升。关键创新：GPT-5.5 参与了自身推理基础设施优化（负载均衡算法），Token 生成速度提升 20%。OpenAI 内部 85% 员工每周使用 Codex，财务团队用其审阅 24,771 份 K-1 税表（71,637 页），比去年提前两周完工。对消金 PM 的启发：模型已从工具进化为工作系统，可自主规划、检查、持续推进任务，风控报告自动生成、合规文档审核等场景可直接套用其 Agent 工作流。"
+      },
+      {
+        "title": "Anthropic 发布 Claude Opus 4.7: 编程暴涨 11%，加量不加价",
+        "source": "腾讯云开发者社区 / Anthropic",
+        "date": "2026-04-17",
+        "relevance": "视觉能力质变（技术图纸/财报识别精度大幅提升），消金风控看报表、审核合同可直接用；自我验证机制降低翻车率",
+        "url": "https://cloud.tencent.com/developer/news/3844958",
+        "content": "Anthropic 于 4 月 17 日发布 Claude Opus 4.7，SWE-bench Pro 得分从 53.4% 飙升至 64.3%，编程能力暴涨 11%。核心升级：1) 视觉能力质变，支持更高清图像解析，技术图纸、密集图表、UI 界面识别精度大幅提升；2) 新增自我验证机制，输出前主动自检纠错，长文本/长任务翻车率大幅降低；3) 新增 Xhigh 推理强度档位，深度与速度更平衡；4) 工具调用稳定性显著提升。最大亮点：能力全面升级但价格不变，性价比拉满。对消金 PM 的价值：财报/合同/报表的视觉识别能力提升意味着风控审核场景可直接用多模态能力处理扫描件、截图等非结构化文档；自我验证机制让 AI 在合规审核等高风险场景更可靠。"
+      },
+      {
+        "title": "Google 发布 Gemini 3.5 Flash 并设为默认模型",
+        "source": "Google AI Blog",
+        "date": "2026-05-20",
+        "relevance": "轻量模型成为默认意味着低成本推理成为行业标配，消金风控实时调用 LLM 的成本门槛进一步降低",
+        "url": "https://blog.google/technology/ai/",
+        "content": "Google 于 5 月 20 日发布 Gemini 3.5 Flash 并将其设为 Google AI Studio 和 Vertex AI 的默认模型。这是 Gemini Flash 系列的最新迭代，定位为高性价比推理模型。Flash 系列自推出以来一直是 Google 对标中小模型市场的核心产品，此次升级后推理能力进一步逼近 Pro 版本，同时保持极低成本。将 Flash 设为默认模型释放了一个明确信号：行业正在从追求最强模型转向追求最优性价比，轻量级推理模型已成为企业级应用的主流选择。对消金 PM 的启发：风控场景中实时调用 LLM 进行欺诈检测的成本一直是落地瓶颈，Flash 级别模型成为默认意味着在风控决策引擎中嵌入 LLM 判断的经济可行性进一步提高，适合贷前审核、异常交易检测等高频低延迟场景。"
+      },
+      {
+        "title": "斯坦福发布 2026 AI 指数报告: 全球企业 AI 投资飙至 5817 亿美元",
+        "source": "Stanford HAI / 启元洞见",
+        "date": "2026-04-13",
+        "relevance": "权威趋势报告，AI PRD 引用增强说服力；53% 企业采用率、AI 安全事件增 55% 等数据可直接用于合规论证",
+        "url": "https://www.ciste.org.cn/gjkjwj/zkgd/art/2026/art_e0eace95585647ed8a8c2b395d580f43.html",
+        "content": "斯坦福 HAI 于 4 月 13 日发布第九版《AI 指数报告》。核心数据：2025 年全球企业 AI 投资达 5816.9 亿美元；生成式 AI 三年内实现 53% 企业采用率；AI 安全事件从 233 起跃升至 362 起（增幅 55%）；主流 LLM 幻觉率仍高达 22%-94%。关键发现：1) 产业界贡献超 90% 重要模型，中美差距显著收窄；2) 智能体在软件工程和网页操作中展现自主能力，但 OSWorld 测试最佳成功率仅 66%；3) 欧盟《AI 法案》首批条款已生效，禁止预测性执法和情绪识别；4) 73% 的 AI 专家对就业持积极态度，但公众仅 23% 同意，认知鸿沟达 50 个百分点。对消金 PM 的价值：写 AI PRD 时可引用企业采用率（53%）论证趋势必然性，引用安全事件增幅（55%）论证合规投入必要性，引用幻觉率数据（22%-94%）论证人在回路（HITL）的必要性。"
+      },
+      {
+        "title": "斯坦福 HAI 合并数据科学机构，李飞飞升任校长 AI 特别顾问",
+        "source": "DeepTech 深科技",
+        "date": "2026-05-05",
+        "relevance": "AI 从院系事务升级为校长直管战略，预示全球高校 AI 组织架构变革，消金公司设立 AI 专职 PM 岗位的行业信号",
+        "url": "https://news.qq.com/rain/a/20260505A05J6S00",
+        "content": "斯坦福于 5 月 5 日宣布将 HAI（以人为本人工智能研究院）与数据科学计划合并，新机构沿用 HAI 名称。李飞飞卸任联席院长，出任校长 AI 特别顾问——这是斯坦福首次将 AI 特别顾问写入校长办公室，相当于把 AI 从院系事务提升为校长直管战略。合并后新 HAI 汇聚 400+ 跨学科学者、6000 万美元研究资助，以及原 SDS 的 Marlowe GPU 集群（首次拥有校级算力自主调度能力）。图灵奖得主、前校长 John Hennessy 回归担任咨询委员会联席主席。新 HAI 围绕三大方向：跨学科发现（20+ 人规模团队科学）、教育变革、社会影响研究。对消金 PM 的信号：当顶级大学都把 AI 从部门级提升为企业级战略，消金公司设立 AI 专职 PM/PO 岗位不再是可选项而是必选项。组织架构先行，才能支撑后续 AI PRD 落地。"
+      },
       {
         "title": "OpenAI Realtime API 支持中文方言识别",
         "source": "OpenAI Blog",
@@ -294,10 +394,30 @@
         "duration": "约 2 小时",
         "overallScore": 63,
         "dimensions": [
-          {"name": "LLM 边界判断", "score": 70, "level": "B", "comment": "理解 LLM 擅长理解+生成，不擅长精确决策；金融场景必须可解释"},
-          {"name": "项目可行性", "score": 65, "level": "B-", "comment": "可行性 ≠ 技术可行，要算账（ROI）+ 看监管 + 定降级方案"},
-          {"name": "Prompt 工程", "score": 50, "level": "C（瓶颈）", "comment": "瓶颈不是写 prompt，是业务判断准确度。把'软抗'误判为'需要周转'"},
-          {"name": "效果评估", "score": 68, "level": "B", "comment": "三步走思路完整：离线评估 → 影子模式 → 持续监控+badcase 闭环"}
+          {
+            "name": "LLM 边界判断",
+            "score": 70,
+            "level": "B",
+            "comment": "理解 LLM 擅长理解+生成，不擅长精确决策；金融场景必须可解释"
+          },
+          {
+            "name": "项目可行性",
+            "score": 65,
+            "level": "B-",
+            "comment": "可行性 ≠ 技术可行，要算账（ROI）+ 看监管 + 定降级方案"
+          },
+          {
+            "name": "Prompt 工程",
+            "score": 50,
+            "level": "C（瓶颈）",
+            "comment": "瓶颈不是写 prompt，是业务判断准确度。把'软抗'误判为'需要周转'"
+          },
+          {
+            "name": "效果评估",
+            "score": 68,
+            "level": "B",
+            "comment": "三步走思路完整：离线评估 → 影子模式 → 持续监控+badcase 闭环"
+          }
         ],
         "questions": [
           {
@@ -334,17 +454,61 @@
           }
         ],
         "conceptsLearned": [
-          {"term": "Offline Evaluation", "zh": "离线评估", "desc": "新模型上线前用历史数据测准确率"},
-          {"term": "Shadow Mode", "zh": "影子模式 / 陪跑", "desc": "新旧模型同时跑，新模型只看不接管"},
-          {"term": "Stratified Sampling", "zh": "分层抽样", "desc": "按场景比例抽样保证覆盖度"},
-          {"term": "Precision vs Recall", "zh": "精确率 vs 召回率", "desc": "查准 vs 查全的权衡"},
-          {"term": "Model Drift", "zh": "模型漂移", "desc": "业务变化导致模型准确率衰减"},
-          {"term": "Hallucination", "zh": "幻觉", "desc": "LLM 编造不存在的事实"},
-          {"term": "Data Flywheel", "zh": "数据飞轮", "desc": "badcase → 标注 → 训练 → 部署 → 新 badcase 闭环"},
-          {"term": "SME", "zh": "Subject Matter Expert / 业务专家", "desc": "AI-PM 工作流中的关键角色：补充业务示例"},
-          {"term": "HITL", "zh": "Human-in-the-Loop / 人在回路", "desc": "AI 决策中保留人工审核节点"},
-          {"term": "真·需要周转", "zh": "三条件齐全", "desc": "明确原因 + 明确时间 + 明确金额，缺一不可"},
-          {"term": "软抗", "zh": "拒绝沟通", "desc": "用'困难''再说''过几天'敷衍但不给具体方案"}
+          {
+            "term": "Offline Evaluation",
+            "zh": "离线评估",
+            "desc": "新模型上线前用历史数据测准确率"
+          },
+          {
+            "term": "Shadow Mode",
+            "zh": "影子模式 / 陪跑",
+            "desc": "新旧模型同时跑，新模型只看不接管"
+          },
+          {
+            "term": "Stratified Sampling",
+            "zh": "分层抽样",
+            "desc": "按场景比例抽样保证覆盖度"
+          },
+          {
+            "term": "Precision vs Recall",
+            "zh": "精确率 vs 召回率",
+            "desc": "查准 vs 查全的权衡"
+          },
+          {
+            "term": "Model Drift",
+            "zh": "模型漂移",
+            "desc": "业务变化导致模型准确率衰减"
+          },
+          {
+            "term": "Hallucination",
+            "zh": "幻觉",
+            "desc": "LLM 编造不存在的事实"
+          },
+          {
+            "term": "Data Flywheel",
+            "zh": "数据飞轮",
+            "desc": "badcase → 标注 → 训练 → 部署 → 新 badcase 闭环"
+          },
+          {
+            "term": "SME",
+            "zh": "Subject Matter Expert / 业务专家",
+            "desc": "AI-PM 工作流中的关键角色：补充业务示例"
+          },
+          {
+            "term": "HITL",
+            "zh": "Human-in-the-Loop / 人在回路",
+            "desc": "AI 决策中保留人工审核节点"
+          },
+          {
+            "term": "真·需要周转",
+            "zh": "三条件齐全",
+            "desc": "明确原因 + 明确时间 + 明确金额，缺一不可"
+          },
+          {
+            "term": "软抗",
+            "zh": "拒绝沟通",
+            "desc": "用'困难''再说''过几天'敷衍但不给具体方案"
+          }
         ],
         "feedback": "Prompt 工程的真正瓶颈不是技巧，是业务判断准确度。需要 SME 补充业务示例后才能写出准确的 prompt。",
         "userQuote": "我大概会先做一些基础示例，然后让一线催收的主管人员补充，然后交给AI复合，之后再进入真正的prompt里",
